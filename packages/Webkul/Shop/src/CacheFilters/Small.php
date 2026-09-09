@@ -2,18 +2,18 @@
 
 namespace Webkul\Shop\CacheFilters;
 
+use Illuminate\Image\Image;
 use Illuminate\Support\Str;
-use Intervention\Image\Filters\FilterInterface;
-use Intervention\Image\Image;
 
-class Small implements FilterInterface
+class Small
 {
     /**
      * Apply filter.
      *
-     * @return \Intervention\Image\Image
+     * @param  Image  $image
+     * @return Image
      */
-    public function applyFilter(Image $image)
+    public function applyFilter($image)
     {
         /**
          * If the current url is product image
@@ -27,16 +27,19 @@ class Small implements FilterInterface
                 ? core()->getConfigData('catalog.products.cache_small_image.height')
                 : 100;
 
-            return $image->fit($width, $height);
+            return $image->cover((int) $width, (int) $height);
         } elseif (Str::contains(url()->current(), '/category')) {
-            return $image->fit(80, 80);
+            return $image->cover(80, 80);
         } elseif (Str::contains(url()->current(), '/attribute_option')) {
-            return $image->fit(60, 60);
+            return $image->cover(60, 60);
         }
 
         /**
-         * Slider image dimensions
+         * Slider image dimensions. Sized so mobile devices (Moto G Power
+         * at 412 CSS px × 1.75 DPR ≈ 721 device px) pick this variant from
+         * the carousel srcset instead of the 1024w medium one — Lighthouse
+         * flags this as the #1 LCP saving on the homepage.
          */
-        return $image->fit(525, 191);
+        return $image->cover(768, 280);
     }
 }

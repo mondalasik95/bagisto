@@ -2,6 +2,7 @@
 
 namespace Webkul\Shop\Http\Controllers\API;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Event;
@@ -12,7 +13,7 @@ class CustomerController extends APIController
     /**
      * Login Customer
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function login(LoginRequest $request)
     {
@@ -33,7 +34,7 @@ class CustomerController extends APIController
         if (! auth()->guard('customer')->user()->is_verified) {
             Cookie::queue(Cookie::make('enable-resend', 'true', 1));
 
-            Cookie::queue(Cookie::make('email-for-resend', $request->get('email'), 1));
+            Cookie::queue(Cookie::make('email-for-resend', $request->input('email'), 1));
 
             auth()->guard('customer')->logout();
 

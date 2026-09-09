@@ -3,10 +3,13 @@
 namespace Webkul\Admin\Http\Controllers\Settings;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 use Webkul\Admin\DataGrids\Settings\UserDataGrid;
 use Webkul\Admin\Http\Controllers\Controller;
 use Webkul\Admin\Http\Requests\UserForm;
@@ -28,7 +31,7 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function index()
     {
@@ -91,7 +94,7 @@ class UserController extends Controller
 
         return new JsonResponse([
             'roles' => $roles,
-            'user'  => $user,
+            'user' => $user,
         ]);
     }
 
@@ -104,13 +107,21 @@ class UserController extends Controller
 
         $data = $this->prepareUserData($request, $id);
 
-        if ($data instanceof \Illuminate\Http\RedirectResponse) {
+        if ($data instanceof RedirectResponse) {
             return new JsonResponse([
                 'message' => trans('admin::app.settings.users.update-success'),
             ]);
         }
 
         Event::dispatch('user.admin.update.before', $id);
+
+        /**
+         * If the request has image.image, it means the request doesn't upload a new image.
+         * So we need to remove it from the data to prevent the image from being overwritten.
+         */
+        if (request()->has('image.image')) {
+            unset($data['image']);
+        }
 
         $admin = $this->adminRepository->update($data, $id);
 
@@ -180,7 +191,7 @@ class UserController extends Controller
      * Show the form for confirming the user password.
      *
      * @param  int  $id
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function confirm($id)
     {
@@ -192,7 +203,7 @@ class UserController extends Controller
     /**
      * Destroy current after confirming.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroySelf(): JsonResponse
     {
@@ -212,7 +223,7 @@ class UserController extends Controller
 
                 return new JsonResponse([
                     'redirectUrl' => route('admin.session.create'),
-                    'message'     => trans('admin::app.settings.users.delete-success'),
+                    'message' => trans('admin::app.settings.users.delete-success'),
                 ]);
             }
         } else {
@@ -226,7 +237,7 @@ class UserController extends Controller
      * Prepare user data.
      *
      * @param  int  $id
-     * @return array|\Illuminate\Http\RedirectResponse
+     * @return array|RedirectResponse
      */
     private function prepareUserData(UserForm $request, $id)
     {
@@ -279,7 +290,7 @@ class UserController extends Controller
     /**
      * Cannot change redirect response.
      */
-    private function cannotChangeRedirectResponse(string $columnName): \Illuminate\Http\RedirectResponse
+    private function cannotChangeRedirectResponse(string $columnName): RedirectResponse
     {
         session()->flash('error', trans('admin::app.settings.users.cannot-change', [
             'name' => $columnName,

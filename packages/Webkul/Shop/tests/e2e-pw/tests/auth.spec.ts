@@ -1,43 +1,60 @@
-import { test, expect } from "../setup";
-import { register } from "../utils/customer";
+import { test } from "../setup";
+import { AuthPage } from "../pages/shop/AuthPage";
+import { buildCustomerCredentials } from "../utils/customer";
 
-test("should be able to register", async ({ page }) => {
-    await register(page);
-});
+test.describe("customer authentication", () => {
+    test("should register a new customer", async ({ shopPage }) => {
+        const authPage = new AuthPage(shopPage);
+        const credentials = buildCustomerCredentials();
 
-test("should be able to login", async ({ page }) => {
-    const credentials = await register(page);
+        await authPage.register(credentials);
+        await authPage.login(credentials);
 
-    await page.goto("");
-    await page.getByLabel("Profile").click();
-    await page.getByRole("link", { name: "Sign In" }).click();
-    await page.getByPlaceholder("email@example.com").click();
-    await page.getByPlaceholder("email@example.com").fill(credentials.email);
-    await page.getByPlaceholder("Password").click();
-    await page.getByPlaceholder("Password").fill(credentials.password);
-    await page.getByRole("button", { name: "Sign In" }).click();
+        await authPage.expectSignedIn(`${credentials.firstName} ${credentials.lastName}`);
+    });
 
-    await page.getByLabel("Profile").click();
-    await expect(page.getByText("Logout").first()).toBeVisible();
-});
+    test("should refuse to register an email that is already registered", async ({
+        shopPage,
+    }) => {
+        const authPage = new AuthPage(shopPage);
+        const credentials = buildCustomerCredentials();
 
-test("should be able to logout", async ({ page }) => {
-    const credentials = await register(page);
+        await authPage.register(credentials);
+        await authPage.attemptRegister({ ...buildCustomerCredentials(), email: credentials.email });
 
-    await page.goto("");
-    await page.getByLabel("Profile").click();
-    await page.getByRole("link", { name: "Sign In" }).click();
-    await page.getByPlaceholder("email@example.com").click();
-    await page.getByPlaceholder("email@example.com").fill(credentials.email);
-    await page.getByPlaceholder("Password").click();
-    await page.getByPlaceholder("Password").fill(credentials.password);
-    await page.getByRole("button", { name: "Sign In" }).click();
+        await authPage.expectRegistrationRefused("The email has already been taken.");
+    });
 
-    await page.getByLabel("Profile").waitFor({ state: "visible" });
-    await page.getByLabel("Profile").click();
-    await page.getByRole("link", { name: "Logout" }).click();
+    test("should sign in a registered customer", async ({ shopPage }) => {
+        const authPage = new AuthPage(shopPage);
+        const credentials = buildCustomerCredentials();
 
-    await page.getByLabel("Profile").waitFor({ state: "visible" });
-    await page.getByLabel("Profile").click();
-    await expect(page.getByText("Welcome Guest").first()).toBeVisible();
+        await authPage.register(credentials);
+        await authPage.login(credentials);
+
+        await authPage.expectSignedIn(`${credentials.firstName} ${credentials.lastName}`);
+    });
+
+    test("should refuse a wrong password", async ({ shopPage }) => {
+        const authPage = new AuthPage(shopPage);
+        const credentials = buildCustomerCredentials();
+
+        await authPage.register(credentials);
+        await authPage.attemptLogin(credentials.email, "wrong-password");
+
+        await authPage.expectLoginRefused();
+        await authPage.expectSignedOut();
+    });
+
+    test("should sign a customer out", async ({ shopPage }) => {
+        const authPage = new AuthPage(shopPage);
+        const credentials = buildCustomerCredentials();
+
+        await authPage.register(credentials);
+        await authPage.login(credentials);
+        await authPage.logout();
+
+        await authPage.expectGuestMenu();
+        await authPage.expectSignedOut();
+    });
 });

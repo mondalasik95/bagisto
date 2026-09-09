@@ -1,0 +1,334 @@
+# AGENTS.md — Cross-Agent Instructions for Bagisto 2.5.x
+
+## Skills — load the relevant one before writing code, not after
+
+This repository ships its conventions as skills under `.claude/skills/<name>/SKILL.md`. If your
+harness has no skill loader, read those files directly — they are plain markdown. They carry rules
+that `vendor/bin/pint` does not enforce and that a reviewer will otherwise send back.
+
+**`bagisto-coding-standards` applies to nearly every change** — it owns code style, comments and
+docblocks, Laravel idiom, Blade, database access, security and localization. Load it alongside
+whichever of the below fits the task.
+
+| Working on | Load |
+|---|---|
+| Any PHP or Blade | `bagisto-coding-standards` |
+| A package: providers, models, repositories, routes, controllers, ACL, menus, config | `bagisto-package-development` |
+| An admin listing page | `bagisto-datagrid-development` |
+| Attributes, families, EAV values | `bagisto-attribute-development` |
+| The Appearance area — theme sections, the editor, its preview | `bagisto-theme-sections` |
+| Imports — Importer classes, the queued pipeline | `bagisto-data-transfer` |
+| A payment gateway | `bagisto-payment-method-development` |
+| A shipping carrier | `bagisto-shipping-method-development` |
+| A product type | `bagisto-product-type-development` |
+| A storefront or admin theme | `bagisto-shop-theme-development` / `bagisto-admin-theme-development` |
+| A storefront feature on the advanced theme workflow | `bagisto-shop-advance-theme-development` |
+| Pest tests | `bagisto-pest-testing` |
+| Playwright end-to-end tests | `bagisto-playwright-testing` |
+| Reviewing a change | `bagisto-code-review` |
+| Branching, commits, CHANGELOG, PRs | `bagisto-git-workflow` |
+| The REST/GraphQL API | `bagisto-api-develop` / `bagisto-api-shop` / `bagisto-api-admin` |
+| Any documentation site — developer docs, user guide, screenshots | `bagisto-documentation` |
+
+**Load `bagisto-change-verification` before calling any change done** — it owns the gates (Pint,
+Pest, Playwright, translation completeness).
+
+One rule that catches people out:
+
+- **A pre-existing violation in a file you touch is yours.** `bagisto-coding-standards` is
+  explicit: when you edit a class, scan its whole member order and docblocks and fix what is
+  already wrong. Leaving it is treated the same as introducing it.
+
+Where a skill and the surrounding code genuinely disagree, match the surrounding code and say so in
+your summary rather than silently churning the codebase either way.
+
+## Do Not Edit
+
+- `vendor/`, `node_modules/`, `composer.lock`, `package-lock.json`
+- `public/themes/*/build/` — Vite build output
+- `storage/` — runtime caches, logs, compiled views
+- `*.hot` files — Vite HMR markers
+- `packages/Webkul/*/src/Resources/assets/` — only edit if working on frontend; always run `npm run build` from the respective package directory after
+
+## Repository Map
+
+```
+├── app/                        # Thin Laravel app shell (middleware, providers)
+├── bootstrap/
+│   ├── app.php                 # Middleware, exceptions, routing
+│   └── providers.php           # All service provider registrations
+├── config/
+│   ├── concord.php             # Concord module (model proxy) registrations
+│   ├── themes.php              # Shop + Admin theme config (Vite paths)
+│   ├── elasticsearch.php       # Elasticsearch connection defaults (admin settings override)
+│   └── ...                     # Standard Laravel configs
+├── database/
+│   ├── migrations/             # App-level migrations
+│   └── seeders/
+├── packages/Webkul/            # ★ All Bagisto packages live here (42 packages)
+│   ├── Admin/                  # Admin panel (controllers, views, DataGrids, reporting, e2e-pw tests)
+│   ├── Shop/                   # Customer storefront (controllers, views, e2e-pw tests)
+│   ├── Core/                   # Helpers, models, jobs, listeners, exchange rates
+│   ├── Product/                # Product models, types, indexers, repositories
+│   ├── Sales/                  # Orders, invoices, shipments, refunds
+│   ├── Checkout/               # Cart, checkout flow
+│   ├── Customer/               # Customer models, auth
+│   ├── Category/               # Category tree (nested set)
+│   ├── Attribute/              # EAV attribute system
+│   ├── Payment/                # Base payment classes (CashOnDelivery, MoneyTransfer)
+│   ├── Paypal/                 # PayPal integration
+│   ├── Stripe/                 # Stripe integration
+│   ├── Razorpay/               # Razorpay integration
+│   ├── PayU/                   # PayU integration
+│   ├── PayGlocal/              # PayGlocal integration
+│   ├── Shipping/               # Base shipping carriers
+│   ├── Inventory/              # Stock management
+│   ├── CartRule/               # Cart promotion rules
+│   ├── CatalogRule/            # Catalog price rules
+│   ├── Tax/                    # Tax calculation
+│   ├── DataGrid/               # Admin data table component
+│   ├── DataTransfer/           # Import/export
+│   ├── CMS/                    # CMS pages
+│   ├── Marketing/              # SEO, URL rewrites, search terms, campaigns
+│   ├── Theme/                  # Theme management
+│   ├── MagicAI/                # AI features (Laravel AI SDK)
+│   ├── Notification/           # Notifications
+│   ├── BookingProduct/         # Booking product type
+│   ├── Rule/                   # Shared rule engine base
+│   ├── User/                   # Admin user management
+│   ├── Installer/              # Installation wizard
+│   ├── SocialLogin/            # OAuth social login
+│   ├── SocialShare/            # Social sharing
+│   ├── Sitemap/                # XML sitemap generation
+│   ├── GDPR/                   # GDPR compliance
+│   ├── RMA/                    # Return merchandise authorization
+│   ├── FPC/                    # Full page cache
+│   ├── ImageCache/             # Image caching/resizing
+│   ├── DebugBar/               # Debug toolbar
+│   ├── Omnibus/                # EU Omnibus lowest-price history
+│   ├── EUWithdrawal/           # EU right-of-withdrawal
+│   └── PhonePe/                # PhonePe integration
+├── routes/
+│   ├── web.php                 # Minimal — packages define their own routes
+│   └── console.php
+├── tests/
+│   └── Pest.php                # Pest configuration binding test cases to packages
+├── phpunit.xml                 # Test suites per package
+├── pint.json                   # Pint config (preset: laravel)
+├── vite.config.js              # Root Vite config
+└── docker-compose.yml          # Sail: MySQL 8, Redis, Elasticsearch 7.17, Kibana, Mailpit
+└── docker/production/          # Production images: {nginx,apache,litespeed} x {mysql,mariadb,postgres}
+```
+
+## Package Internal Structure
+
+Every package in `packages/Webkul/{Name}/src/` follows:
+
+```
+├── Config/                     # admin-menu.php, system.php, acl.php, carriers.php, etc.
+├── Contracts/                  # Interfaces for each model
+├── Database/
+│   ├── Migrations/
+│   ├── Factories/
+│   └── Seeders/
+├── DataGrids/                  # DataGrid classes (extends Webkul\DataGrid\DataGrid)
+├── Http/
+│   ├── Controllers/
+│   ├── Middleware/
+│   └── Requests/               # Form Request validation classes
+├── Jobs/
+├── Listeners/
+├── Models/                     # Eloquent models + Proxy classes
+├── Observers/
+├── Providers/
+│   ├── {Name}ServiceProvider.php
+│   └── ModuleServiceProvider.php  # Concord model registration
+├── Repositories/               # Prettus L5 repositories
+├── Resources/
+│   ├── assets/                 # JS, CSS, images (Vite-compiled)
+│   ├── lang/{locale}/          # 22 locales
+│   └── views/
+├── Routes/
+│   ├── admin-routes.php
+│   └── shop-routes.php
+└── Type/                       # (Product package) Product type classes
+```
+
+## Key Architecture Patterns
+
+- **Concord Module System**: Models registered in each package's `ModuleServiceProvider`, wired via `config/concord.php`. Every data entity has a Contract (interface), Model, and Proxy (three-component system).
+- **Repository Pattern**: All DB access through repositories extending `Webkul\Core\Eloquent\Repository` (Prettus L5). Repository `model()` returns the Contract class, not the Model.
+- **Path Repositories**: `composer.json` uses `"type": "path"` for `packages/*/*`, packages are symlinked — no `composer update` needed for package code changes. Run `composer dump-autoload` after adding new packages.
+- **Service Providers**: Each package has a main ServiceProvider (routes, views, translations, migrations, config) registered in `bootstrap/providers.php`.
+- **Dual Route Files**: Admin routes (`['web', 'admin']` middleware, `config('app.admin_url')` prefix) and Shop routes (`['web', 'locale', 'theme', 'currency']` middleware).
+- **22 Locales**: ar, bn, ca, de, en, es, fa, fr, he, hi_IN, id, it, ja, nl, pl, pt_BR, ro, ru, sin, tr, uk, zh_CN. Translation changes must be applied to ALL locale files. Verify with `php artisan bagisto:translations:check`.
+
+## Commands
+
+### Testing
+```bash
+# Pest (PHP)
+vendor/bin/pest                                          # Run all tests
+vendor/bin/pest --parallel                               # Run all tests in parallel
+vendor/bin/pest --filter=testName                        # Run specific test
+vendor/bin/pest packages/Webkul/Admin/tests/Feature      # Run package tests
+vendor/bin/pest --testsuite="Unit Test"                  # Cross-package checks; needs no database
+
+# Playwright (E2E) — Admin (run from packages/Webkul/Admin)
+cd packages/Webkul/Admin && npm install && npm run install:browsers
+cd packages/Webkul/Admin && npm run test:e2e
+
+# Playwright (E2E) — Shop (run from packages/Webkul/Shop)
+cd packages/Webkul/Shop && npm install && npm run install:browsers
+cd packages/Webkul/Shop && npm run test:e2e
+```
+
+### Fresh Database Setup for Parallel Testing
+Parallel testing creates `{DB_DATABASE}_test_1`, `{DB_DATABASE}_test_2`, etc. based on the number of CPU cores. For example, with `DB_DATABASE=bagisto` on a 6-core machine, it creates `bagisto_test_1` through `bagisto_test_6`. This applies to both MySQL and PostgreSQL.
+
+When the schema changes, these test databases become stale and must be dropped before re-running:
+
+```bash
+# Drop parallel test databases (adjust the count to match your CPU cores)
+php artisan tinker --execute="for (\$i = 1; \$i <= 6; \$i++) { try { DB::statement(\"DROP DATABASE IF EXISTS bagisto_test_{\$i}\"); } catch (\Exception \$e) {} }"
+
+# Fresh install
+php artisan bagisto:install --no-interaction
+
+# Run tests
+vendor/bin/pest --parallel --no-coverage
+```
+
+### Code Style
+```bash
+vendor/bin/pint --dirty          # Fix changed files only
+vendor/bin/pint                  # Fix all files
+vendor/bin/pint --test           # Check only (CI uses this)
+```
+
+**Important:** Always run `vendor/bin/pint` on modified files after every code change before running tests or marking work as complete.
+
+#### Multi-condition control flow
+
+When an `if` / `elseif` / `while` / `for` condition contains more than one expression joined by `&&` or `||`, split it across multiple lines with each expression on its own line and the boolean operator leading the next line:
+
+```php
+// Good
+if (
+    $user->isActive()
+    && $user->hasRole('admin')
+) {
+    return true;
+}
+
+// Avoid
+if ($user->isActive() && $user->hasRole('admin')) {
+    return true;
+}
+```
+
+Single-condition statements stay on one line. Pint/PHP-CS-Fixer has no rule that enforces this automatically — it is a manual convention, so apply it when writing or reviewing code.
+
+### Commenting Conventions
+
+- **Section headers / titles**: Title Case, no trailing period.
+  ```php
+  // Store
+  // Product Attribute Values
+  // Store — All Product Types
+  ```
+- **Inline labels** (grouping assertions inside a test): Title Case, no trailing period.
+  ```php
+  // Core fields
+  // Text fields indexed from attribute values
+  // Numeric fields
+  // Boolean fields
+  // Locale and channel
+  ```
+- **Sentence comments** (explanations, steps, notes): Start with a capital letter and end with a period.
+  ```php
+  // Step 1: Store the product skeleton via the controller.
+  // Virtual products do not require weight, length, width, or height.
+  // Verify product_flat reflects the changed values.
+  ```
+- **PHPDoc**: Every method should have a single-line description ending with a period.
+
+### Frontend (run from within each package: Admin, Shop, or Installer)
+```bash
+cd packages/Webkul/Admin && npm install && npm run build    # Admin production build
+cd packages/Webkul/Shop && npm install && npm run build     # Shop production build
+cd packages/Webkul/Admin && npm run dev                     # Admin dev server with HMR
+cd packages/Webkul/Shop && npm run dev                      # Shop dev server with HMR
+```
+
+### Database
+```bash
+php artisan migrate              # Run migrations
+php artisan db:seed              # Seed database
+```
+
+## CI Workflows (.github/workflows/)
+
+| Workflow | Trigger | What it does |
+|----------|---------|--------------|
+| `pest-tests.yml` | push, PR | Installs Bagisto, runs `vendor/bin/pest --parallel` (MySQL, MariaDB, PostgreSQL) |
+| `pint-tests.yml` | push, PR | Runs `pint --test` (style check) |
+| `playwright-tests.yml` | push, PR | `installer_gate` runs the guided installer (en + ar × each database) and gates `playwright_tests`, which runs the Admin and Shop projects (10 shards × each database) |
+| `translation-tests.yml` | push, PR | Translation key consistency |
+| `docker-publish.yml` | `v*` tag, manual | Builds and pushes the production images — {nginx, apache, litespeed} x {mysql, mariadb, postgres}, multi-arch |
+
+All workflows run on **PHP 8.4**, which is the minimum the project requires.
+
+## PostgreSQL Compatibility
+
+All code must work on both MySQL 8.0 and PostgreSQL 16. Use the existing `db_grammar()` abstraction for DB-specific syntax.
+
+### Case-Insensitive LIKE
+MySQL `LIKE` is case-insensitive by default; PostgreSQL `LIKE` is case-sensitive. Use the grammar helper:
+```php
+// Correct — uses LIKE on MySQL, ILIKE on PostgreSQL
+$query->where('name', db_grammar()->caseInsensitiveLike(), '%'.$search.'%');
+
+// For exact-case matching (rare)
+$query->where('code', db_grammar()->caseSensitiveLike(), '%'.$search.'%');
+```
+Never hardcode `'like'` for user-facing text searches.
+
+### Empty Strings → Use Model Mutators
+MySQL coerces `""` to `0`/`NULL`. PostgreSQL rejects it. Add set mutators on models:
+```php
+public function setPriorityAttribute($value): void
+{
+    $this->attributes['priority'] = $value !== '' && $value !== null ? (int) $value : 0;
+}
+```
+Always pair with `$casts` for read-side consistency. Never sanitize in controllers.
+
+### Other Pitfalls
+- **CASE types must match**: `CASE WHEN x THEN varchar_col ELSE CAST(int_col AS CHAR) END`
+- **GROUP BY must include all non-aggregated SELECT columns**
+- **`DB::raw('col + 1')` in `updateOrCreate()`** fails on INSERT — split into find + update/create
+- **DB-specific SQL**: Use `db_grammar()` methods (`concat`, `groupConcat`, `findInSet`, `dateFormat`, `jsonExtract`, `caseInsensitiveLike`, `caseSensitiveLike`, etc.)
+
+## Safety Rails
+
+- **Never modify `bootstrap/providers.php` or `config/concord.php`** without understanding the full provider chain — removing a provider breaks the entire module.
+- **Translations are 22 files per key.** Missing a locale will fail CI. When adding/removing translation keys, hit all 22 files.
+- **No comments inside method bodies.** Docblocks above classes, methods, and properties only. Never annotate a statement with what it does or why it changed — that belongs in the commit message. Applies to `//` and `/** */` alike, in PHP, Blade, JS, and Vue. If a line needs prose to be understood, extract a named method instead.
+- **Pint must pass.** Run `vendor/bin/pint --dirty` before finalizing any PHP change.
+- **Tests must pass.** Run affected package tests after changes. Do not delete tests without approval.
+- **PostgreSQL compatibility is required.** Never hardcode `'like'` for text searches — use `db_grammar()->caseInsensitiveLike()`. Never rely on MySQL-specific implicit coercions. Handle type normalization in models via `$casts` and set mutators.
+- **Do not add/remove composer dependencies without approval.**
+- **Do not create documentation files unless explicitly requested.**
+
+## Validation Checklist (Before Marking Complete)
+
+1. `vendor/bin/pint --dirty` — no style violations
+2. `php artisan test --compact` — affected tests pass
+3. `php artisan bagisto:translations:check` — translation keys exist in all 22 locale files (if changed)
+4. No `env()` calls outside `config/` files
+5. New models have Contract + Model + Proxy + Repository
+6. New packages registered in `bootstrap/providers.php` and `config/concord.php`
+7. Conventions from the skills above hold for every file touched — docblocks on each method and
+   property, class members ordered constants → properties → constructor → public → protected →
+   private, multi-clause conditions split across lines, `:` vs `::` correct in Blade

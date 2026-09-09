@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Webkul\Admin\Http\Controllers\CommandPaletteController;
 use Webkul\Admin\Http\Controllers\DashboardController;
 use Webkul\Admin\Http\Controllers\DataGrid\DataGridController;
 use Webkul\Admin\Http\Controllers\DataGrid\SavedFilterController;
@@ -8,6 +9,7 @@ use Webkul\Admin\Http\Controllers\MagicAIController;
 use Webkul\Admin\Http\Controllers\TinyMCEController;
 use Webkul\Admin\Http\Controllers\User\AccountController;
 use Webkul\Admin\Http\Controllers\User\SessionController;
+use Webkul\Admin\Http\Controllers\User\TwoFactorController;
 
 /**
  * Dashboard routes.
@@ -36,6 +38,11 @@ Route::controller(DataGridController::class)->prefix('datagrid')->group(function
 });
 
 /**
+ * Command palette routes.
+ */
+Route::get('command-palette', [CommandPaletteController::class, 'index'])->name('admin.command_palette.index');
+
+/**
  * Tinymce file upload handler.
  */
 Route::post('tinymce/upload', [TinyMCEController::class, 'upload'])->name('admin.tinymce.upload');
@@ -56,6 +63,17 @@ Route::controller(AccountController::class)->prefix('account')->group(function (
     Route::get('', 'edit')->name('admin.account.edit');
 
     Route::put('', 'update')->name('admin.account.update');
+});
+
+/**
+ * Admin two-factor authentication routes.
+ */
+Route::controller(TwoFactorController::class)->prefix('two-factor')->group(function () {
+    Route::get('setup', 'setup')->name('admin.two_factor.setup');
+
+    Route::post('enable', 'enable')->middleware('throttle:5,1')->name('admin.two_factor.enable');
+
+    Route::post('disable', 'disable')->name('admin.two_factor.disable');
 });
 
 Route::delete('logout', [SessionController::class, 'destroy'])->name('admin.session.destroy');

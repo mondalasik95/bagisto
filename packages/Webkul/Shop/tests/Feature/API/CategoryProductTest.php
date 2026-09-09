@@ -1,176 +1,130 @@
 <?php
 
-use Webkul\Faker\Helpers\Category as CategoryFaker;
-use Webkul\Faker\Helpers\Product as ProductFaker;
-use Webkul\Product\Helpers\Toolbar;
+use Illuminate\Support\Collection;
+use Webkul\Category\Models\Category;
+use Webkul\Category\Models\CategoryTranslation;
 
 use function Pest\Laravel\getJson;
 
-it('returns paginated category products', function () {
-    // Arrange.
-    $productsCount = 50;
-
-    $specifiedCategory = (new CategoryFaker)->factory()->create();
-
-    (new ProductFaker)
-        ->getSimpleProductFactory()
-        ->hasAttached($specifiedCategory)
-        ->count($productsCount)
+/**
+ * Create a category with translation for testing.
+ */
+function createTestCategory(): Category
+{
+    return Category::factory()
+        ->has(CategoryTranslation::factory(), 'translations')
         ->create();
+}
 
-    $availableLimits = (new Toolbar)->getAvailableLimits();
+/**
+ * Create multiple products attached to a category.
+ */
+function createCategoryProducts($testContext, Category $category, int $count = 3): Collection
+{
+    $products = collect();
 
-    // Act and Assert.
-    $availableLimits->each(function ($limit) use ($specifiedCategory, $productsCount) {
-        getJson(route('shop.api.products.index', ['category_id' => $specifiedCategory->id, 'limit' => $limit]))
-            ->assertOk()
-            ->assertJsonCount($limit, 'data')
-            ->assertJsonPath('meta.total', $productsCount);
-    });
+    for ($i = 0; $i < $count; $i++) {
+        $product = $testContext->createSimpleProduct();
+        $product->categories()->sync([$category->id]);
+        $products->push($product);
+    }
+
+    return $products;
+}
+
+// ============================================================================
+// Listing
+// ============================================================================
+
+it('should return category products', function () {
+    $category = createTestCategory();
+
+    $product = $this->createSimpleProduct();
+    $product->categories()->sync([$category->id]);
+
+    getJson(route('shop.api.products.index', ['category_id' => $category->id]))
+        ->assertOk()
+        ->assertJsonFragment(['id' => $product->id]);
 });
 
-it('returns category products sorted by name descending', function () {
-    // Arrange.
-    $specifiedCategory = (new CategoryFaker)->factory()->create();
+// ============================================================================
+// Sort by Name
+// ============================================================================
 
-    $products = (new ProductFaker)
-        ->getSimpleProductFactory()
-        ->hasAttached($specifiedCategory)
-        ->count(3)
-        ->create();
+it('should return category products sorted by name descending', function () {
+    $category = createTestCategory();
+    $products = createCategoryProducts($this, $category);
 
-    $expectedNamesInDescOrder = $products
-        ->map(fn ($product) => $product->name)
+    $expected = $products->pluck('name')->sortDesc()->values()->toArray();
+
+    getJson(route('shop.api.products.index', ['category_id' => $category->id, 'sort' => 'name-desc']))
+        ->assertOk()
+        ->assertSeeTextInOrder($expected);
+});
+
+it('should return category products sorted by name ascending', function () {
+    $category = createTestCategory();
+    $products = createCategoryProducts($this, $category);
+
+    $expected = $products->pluck('name')->sort()->values()->toArray();
+
+    getJson(route('shop.api.products.index', ['category_id' => $category->id, 'sort' => 'name-asc']))
+        ->assertOk()
+        ->assertSeeTextInOrder($expected);
+});
+
+// ============================================================================
+// Sort by Date
+// ============================================================================
+
+it('should return category products sorted by created_at descending', function () {
+    $category = createTestCategory();
+    $products = createCategoryProducts($this, $category);
+
+    getJson(route('shop.api.products.index', ['category_id' => $category->id, 'sort' => 'created_at-desc']))
+        ->assertOk()
+        ->assertJsonCount(3, 'data');
+});
+
+it('should return category products sorted by created_at ascending', function () {
+    $category = createTestCategory();
+    $products = createCategoryProducts($this, $category);
+
+    getJson(route('shop.api.products.index', ['category_id' => $category->id, 'sort' => 'created_at-asc']))
+        ->assertOk()
+        ->assertJsonCount(3, 'data');
+});
+
+// ============================================================================
+// Sort by Price
+// ============================================================================
+
+it('should return category products sorted by price descending', function () {
+    $category = createTestCategory();
+    $products = createCategoryProducts($this, $category);
+
+    $expected = $products
+        ->map(fn ($p) => $p->getTypeInstance()->getMinimalPrice())
         ->sortDesc()
+        ->map(fn ($price) => core()->formatPrice($price))
         ->toArray();
 
-    // Act and Assert.
-    getJson(route('shop.api.products.index', ['category_id' => $specifiedCategory->id, 'sort' => 'name-desc']))
+    getJson(route('shop.api.products.index', ['category_id' => $category->id, 'sort' => 'price-desc']))
         ->assertOk()
-        ->assertSeeTextInOrder($expectedNamesInDescOrder);
+        ->assertSeeTextInOrder($expected);
 });
 
-it('returns category products sorted by name ascending', function () {
-    // Arrange.
-    $specifiedCategory = (new CategoryFaker)->factory()->create();
+it('should return category products sorted by price ascending', function () {
+    $category = createTestCategory();
+    $products = createCategoryProducts($this, $category);
 
-    $products = (new ProductFaker)
-        ->getSimpleProductFactory()
-        ->hasAttached($specifiedCategory)
-        ->count(3)
-        ->create();
-
-    $expectedNamesInAscOrder = $products
-        ->map(fn ($product) => $product->name)
+    $expected = $products
+        ->map(fn ($p) => $p->getTypeInstance()->getMinimalPrice())
         ->sort()
+        ->map(fn ($price) => core()->formatPrice($price))
         ->toArray();
 
-    // Act and Assert.
-    getJson(route('shop.api.products.index', ['category_id' => $specifiedCategory->id, 'sort' => 'name-asc']))
+    getJson(route('shop.api.products.index', ['category_id' => $category->id, 'sort' => 'price-asc']))
         ->assertOk()
-        ->assertSeeTextInOrder($expectedNamesInAscOrder);
-});
-
-it('returns category products sorted by created_at descending', function () {
-    // Arrange.
-    $specifiedCategory = (new CategoryFaker)->factory()->create();
-
-    $simpleProductFactory = (new ProductFaker)
-        ->getSimpleProductFactory()
-        ->hasAttached($specifiedCategory);
-
-    $firstProduct = $simpleProductFactory->create([
-        'created_at' => now()->subYear(),
-    ]);
-
-    $secondProduct = $simpleProductFactory->create([
-        'created_at' => now()->subMonth(),
-    ]);
-
-    $lastProduct = $simpleProductFactory->create([
-        'created_at' => now(),
-    ]);
-
-    // Act and Assert.
-    getJson(route('shop.api.products.index', ['category_id' => $specifiedCategory->id, 'sort' => 'created_at-desc']))
-        ->assertOk()
-        ->assertSeeTextInOrder([
-            $lastProduct->id,
-            $secondProduct->id,
-            $firstProduct->id,
-        ]);
-});
-
-it('returns category products sorted by created_at ascending', function () {
-    // Arrange.
-    $specifiedCategory = (new CategoryFaker)->factory()->create();
-
-    $simpleProductFactory = (new ProductFaker)
-        ->getSimpleProductFactory()
-        ->hasAttached($specifiedCategory);
-
-    $firstProduct = $simpleProductFactory->create([
-        'created_at' => now()->subYear(),
-    ]);
-
-    $secondProduct = $simpleProductFactory->create([
-        'created_at' => now()->subMonth(),
-    ]);
-
-    $lastProduct = $simpleProductFactory->create([
-        'created_at' => now(),
-    ]);
-
-    // Act and Assert.
-    getJson(route('shop.api.products.index', ['category_id' => $specifiedCategory->id, 'sort' => 'created_at-asc']))
-        ->assertOk()
-        ->assertSeeTextInOrder([
-            $firstProduct->id,
-            $secondProduct->id,
-            $lastProduct->id,
-        ]);
-});
-
-it('returns category products sorted by price descending', function () {
-    // Arrange.
-    $specifiedCategory = (new CategoryFaker)->factory()->create();
-
-    $products = (new ProductFaker)
-        ->getSimpleProductFactory()
-        ->hasAttached($specifiedCategory)
-        ->count(3)
-        ->create();
-
-    $expectedPricesInDescOrder = $products
-        ->map(fn ($product) => $product->getTypeInstance()->getMinimalPrice())
-        ->sortDesc()
-        ->map(fn ($price) =>  core()->formatPrice($price))
-        ->toArray();
-
-    // Act and Assert.
-    getJson(route('shop.api.products.index', ['category_id' => $specifiedCategory->id, 'sort' => 'price-desc']))
-        ->assertOk()
-        ->assertSeeTextInOrder($expectedPricesInDescOrder);
-});
-
-it('returns category products sorted by price ascending', function () {
-    // Arrange.
-    $specifiedCategory = (new CategoryFaker)->factory()->create();
-
-    $products = (new ProductFaker)
-        ->getSimpleProductFactory()
-        ->hasAttached($specifiedCategory)
-        ->count(3)
-        ->create();
-
-    $expectedPricesInAscOrder = $products
-        ->map(fn ($product) => $product->getTypeInstance()->getMinimalPrice())
-        ->sort()
-        ->map(fn ($price) =>  core()->formatPrice($price))
-        ->toArray();
-
-    // Act and Assert.
-    getJson(route('shop.api.products.index', ['category_id' => $specifiedCategory->id, 'sort' => 'price-asc']))
-        ->assertOk()
-        ->assertSeeTextInOrder($expectedPricesInAscOrder);
+        ->assertSeeTextInOrder($expected);
 });

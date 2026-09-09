@@ -4,6 +4,7 @@ namespace Webkul\SocialLogin\Http\Controllers;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Event;
 use Laravel\Socialite\Facades\Socialite;
@@ -24,7 +25,7 @@ class LoginController extends Controller
      * Redirects to the social provider
      *
      * @param  string  $provider
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function redirectToProvider($provider)
     {
@@ -41,7 +42,7 @@ class LoginController extends Controller
      * Handles callback
      *
      * @param  string  $provider
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function handleProviderCallback($provider)
     {
@@ -57,6 +58,10 @@ class LoginController extends Controller
 
         Event::dispatch('customer.after.login', $customer);
 
-        return redirect()->intended(route('shop.customers.account.profile.index'));
+        if ($intended = session()->pull('shop.url.intended')) {
+            return redirect()->to($intended);
+        }
+
+        return redirect()->route('shop.customers.account.profile.index');
     }
 }

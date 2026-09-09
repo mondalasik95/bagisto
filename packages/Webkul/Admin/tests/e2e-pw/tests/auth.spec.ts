@@ -1,17 +1,33 @@
-import { test, expect } from "../setup";
-import { loginAsAdmin } from "../utils/admin";
+import { test } from "../setup";
+import { LoginPage } from "../pages/admin/auth/LoginPage";
+import { env } from "../utils/env";
 
-test("should be able to login", async ({ page }) => {
-    await loginAsAdmin(page);
+test.describe("admin authentication", () => {
+    test("should sign in with valid credentials and reach the dashboard", async ({
+        page,
+    }) => {
+        const loginPage = new LoginPage(page);
 
-    await expect(page.getByPlaceholder("Mega Search").first()).toBeVisible();
-});
+        await loginPage.login(env.adminEmail, env.adminPassword);
+    });
 
-test("should be able to logout", async ({ page }) => {
-    await loginAsAdmin(page);
+    test("should refuse a wrong password", async ({ page }) => {
+        const loginPage = new LoginPage(page);
 
-    await page.click("button:text('E')");
-    await page.getByRole("link", { name: "Logout" }).click();
+        await loginPage.attemptLogin(env.adminEmail, `${env.adminPassword}x`);
 
-    await expect(page.getByPlaceholder("Password").first()).toBeVisible();
+        await loginPage.expectLoginRefused(
+            "Please check your credentials and try again.",
+        );
+        await loginPage.expectDashboardRequiresLogin();
+    });
+
+    test("should end the session on logout", async ({ page }) => {
+        const loginPage = new LoginPage(page);
+
+        await loginPage.login(env.adminEmail, env.adminPassword);
+        await loginPage.logout();
+
+        await loginPage.expectDashboardRequiresLogin();
+    });
 });

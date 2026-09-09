@@ -45,7 +45,7 @@
                 {!! view_render_event('bagisto.admin.marketing.communications.campaigns.edit.card.general.before', ['campaign' => $campaign]) !!}
 
                 <!-- General Section -->
-                <div class="box-shadow rounded bg-white p-4 dark:bg-gray-900">
+                <div class="box-shadow rounded-sm bg-white p-4 dark:bg-gray-900">
                     <p class="mb-4 text-base font-semibold text-gray-800 dark:text-white">
                         @lang('admin::app.marketing.communications.campaigns.edit.general')
                     </p>
@@ -107,6 +107,7 @@
                                     <option
                                         value="{{ $event->id }}"
                                         {{ $selectedOption == $event->id ? 'selected' : '' }}
+                                        v-pre
                                     >
                                         {{ $event->name }}
                                     </option>
@@ -136,6 +137,7 @@
                                     <option
                                         value="{{ $template->id }}"
                                         {{ $selectedOption == $template->id ? 'selected' : '' }}
+                                        v-pre
                                     >
                                         {{ $template->name }}
                                     </option>
@@ -151,7 +153,7 @@
             </div>
 
              <!-- Right Section -->
-             <div class="flex w-[360px] max-w-full flex-col gap-2 max-md:w-full">
+             <div class="flex w-90 max-w-full flex-col gap-2 max-md:w-full">
 
                 {!! view_render_event('bagisto.admin.marketing.communications.campaigns.edit.card.accordion.setting.before', ['campaign' => $campaign]) !!}
 
@@ -184,6 +186,7 @@
                                     <option
                                         value="{{ $channel->id }}"
                                         {{ $selectedOption == $channel->id ? 'selected' : '' }}
+                                        v-pre
                                     >
                                         {{ core()->getChannelName($channel) }}
                                     </option>
@@ -213,6 +216,7 @@
                                     <option
                                         value="{{ $customerGroup->id }}"
                                         {{ $selectedOption == $customerGroup->id ? 'selected' : '' }}
+                                        v-pre
                                     >
                                         {{ $customerGroup->name }}
                                     </option>
@@ -223,7 +227,7 @@
                         </x-admin::form.control-group>
 
                         <!-- Status -->
-                        <x-admin::form.control-group class="!mb-0">
+                        <x-admin::form.control-group class="mb-0!">
                             <x-admin::form.control-group.label>
                                 @lang('admin::app.marketing.communications.campaigns.edit.status')
                             </x-admin::form.control-group.label>

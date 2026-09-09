@@ -41,7 +41,7 @@
 
                     <!-- Use for Shipping Checkbox -->
                     <x-shop::form.control-group
-                        class="!mb-0 flex items-center gap-2.5"
+                        class="mb-0! flex items-center gap-2.5"
                         v-if="cart.have_stockable_items"
                     >
                         <x-shop::form.control-group.control
@@ -149,6 +149,8 @@
                         })
                         .catch(error => {
                             this.isStoring = false;
+
+                            this.$emit('processing', 'address');
 
                             if (error.response.status == 422) {
                                 setErrors(error.response.data.errors);
