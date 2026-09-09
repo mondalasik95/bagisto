@@ -41,6 +41,7 @@ return [
             'not-activated' => 'يتطلب تنشيط حسابك موافقة المسؤول',
             'page-title' => 'تسجيل الدخول للعملاء',
             'password' => 'كلمة المرور',
+            'resend-verification' => 'إعادة إرسال بريد التحقق',
             'show-password' => 'عرض كلمة المرور',
             'title' => 'تسجيل الدخول',
             'verify-first' => 'الرجاء التحقق من حساب البريد الإلكتروني الخاص بك أولاً.',
@@ -195,6 +196,12 @@ return [
 
                 'view' => [
                     'billing-address' => 'عنوان الفاتورة',
+
+                    'booking-cancellation-not-allowed' => [
+                        'title' => 'عناصر الحجز لن يتم إلغاؤها',
+                        'description' => 'يحتوي هذا الطلب على منتجات حجز مُعلّمة كغير قابلة للإلغاء. سيؤدي إلغاء الطلب فقط إلى إلغاء العناصر المتبقية؛ وستبقى عناصر الحجز نشطة. يرجى التواصل مع الدعم إذا كنت بحاجة إلى مساعدة بشأن عناصر الحجز.',
+                    ],
+
                     'cancel-btn-title' => 'إلغاء',
                     'cancel-confirm-msg' => 'هل أنت متأكد أنك تريد إلغاء هذا الطلب؟',
                     'cancel-error' => 'لا يمكن إلغاء طلبك.',
@@ -207,6 +214,7 @@ return [
                     'order-id' => 'معرف الطلب',
                     'page-title' => 'الطلب #:order_id',
                     'payment-method' => 'طريقة الدفع',
+                    'reorder-booking-skipped' => 'تم تخطي منتجات الحجز أثناء إعادة الطلب. يرجى حجزها مرة أخرى بتواريخ وفترات زمنية جديدة.',
                     'reorder-btn-title' => 'إعادة الطلب',
                     'shipping-address' => 'عنوان الشحن',
                     'shipping-method' => 'طريقة الشحن',
@@ -720,6 +728,11 @@ return [
                     'location' => 'الموقع',
                     'view-on-map' => 'عرض على الخريطة',
 
+                    'cancellation-not-allowed' => [
+                        'title' => 'لا يُسمح بالإلغاء',
+                        'description' => 'بمجرد تقديم هذا الحجز، لا يمكن إلغاؤه. يُرجى مراجعة التفاصيل بعناية قبل إتمام الطلب.',
+                    ],
+
                     'default' => [
                         'slot-duration-in-minutes' => ':minutes دقائق',
                         'slot-duration' => 'مدة الفتحة',
@@ -736,6 +749,16 @@ return [
                     'event' => [
                         'book-your-ticket' => 'احجز تذكرتك',
                         'title' => 'الحدث في :',
+                        'total-price' => 'السعر الإجمالي',
+                        'summary-title' => 'حجزك',
+                        'ticket-line' => ':name (:count × :price)',
+                        'base-fee-line' => 'الرسوم الأساسية (:count × :price)',
+                        'ticket' => 'تذكرة',
+                        'tickets' => 'تذاكر',
+                        'total' => 'المجموع',
+                        'select-tickets-hint' => 'اختر كميات التذاكر لعرض المجموع.',
+                        'starting-from' => 'يبدأ من',
+                        'base-fee-note' => 'يشمل الرسوم الأساسية + أرخص تذكرة. يتم تحديث الإجمالي بناءً على اختيار التذاكر.',
                     ],
 
                     'rental' => [
@@ -751,6 +774,18 @@ return [
                         'slot' => 'الفتحة',
                         'no-slots-available' => 'لا توجد فتحات متاحة',
                         'to' => 'إلى',
+                        'summary-title' => 'إيجارك',
+                        'base-rental-fee' => 'رسوم الإيجار الأساسية',
+                        'daily-rate-line' => 'السعر اليومي (:count × :rate)',
+                        'hourly-rate-line' => 'السعر بالساعة (:count × :rate)',
+                        'day' => 'يوم',
+                        'days' => 'أيام',
+                        'hour' => 'ساعة',
+                        'hours' => 'ساعات',
+                        'total' => 'المجموع',
+                        'select-dates-hint' => 'اختر تواريخ الإيجار لعرض المجموع.',
+                        'starting-from' => 'يبدأ من',
+                        'rental-fee-note' => 'يشمل الرسوم الأساسية + الحد الأدنى لسعر الإيجار. يتم تحديث الإجمالي بناءً على المدة المحددة.',
                     ],
 
                     'table' => [
@@ -822,23 +857,34 @@ return [
 
             'cart' => [
                 'booking-from' => 'الحجز من',
+                'booking-location' => 'الموقع',
                 'booking-till' => 'الحجز حتى',
+                'charged-per' => 'محاسب لكل',
                 'daily' => 'على أساس يومي',
                 'event-from' => 'الحدث من',
+                'event-location' => 'موقع الحدث',
                 'event-ticket' => 'تذكرة الحدث',
                 'event-till' => 'الحدث حتى',
+                'guest-limit' => 'حد الضيوف لكل طاولة',
                 'hourly' => 'على أساس الساعة',
 
                 'integrity' => [
                     'event' => [
                         'expired' => 'لقد انتهت صلاحية هذا الحدث.',
+                        'exceeds_available' => 'يتوفر :qty تذاكر فقط لهذا الحدث.',
+                        'sold_out' => 'تم بيع جميع تذاكر هذا الحدث.',
+                        'ticket_exceeds_available' => 'يتوفر :qty تذاكر ":ticket" فقط.',
+                        'ticket_sold_out' => 'تم بيع جميع تذاكر ":ticket".',
                     ],
 
                     'missing_options' => 'الخيارات مفقودة لهذا المنتج.',
                     'inventory_warning' => 'الكمية المطلوبة غير متوفرة، يرجى المحاولة مرة أخرى لاحقًا.',
-                    'select_hourly_duration' => 'اختر مدة الفتحة الزمنية بساعة واحدة.',
+                    'rental_unavailable' => 'هذا المنتج الإيجاري غير متاح للتواريخ المحددة.',
+                    'select_hourly_duration' => 'اختر مدة زمنية لا تقل عن ساعة واحدة.',
                 ],
 
+                'per-guest' => 'لكل ضيف',
+                'per-table' => 'لكل طاولة',
                 'rent-from' => 'الإيجار من',
                 'rent-till' => 'الإيجار حتى',
                 'rent-type' => 'نوع الإيجار',

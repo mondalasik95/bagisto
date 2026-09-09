@@ -216,6 +216,22 @@ return [
                         'none' => 'None',
                         'total-amount' => 'Total Amount',
                     ],
+
+                    'booking' => [
+                        'loading' => 'Se încarcă configurația rezervării…',
+                        'config-missing' => 'Configurația rezervării lipsește pentru acest produs.',
+                        'date' => 'Dată',
+                        'date-from' => 'Data de început',
+                        'date-to' => 'Data de sfârșit',
+                        'slot' => 'Interval',
+                        'select-slot' => 'Selectați un interval',
+                        'no-slots-available' => 'Nu sunt intervale disponibile pentru data selectată',
+                        'note' => 'Notă',
+                        'quantity' => 'Cantitate',
+                        'renting-type' => 'Tip de închiriere',
+                        'daily' => 'Zilnic',
+                        'hourly' => 'Orar',
+                    ],
                 ],
 
                 'cart' => [
@@ -348,6 +364,12 @@ return [
             'view' => [
                 'amount-per-unit' => ':amount Per Unit x :qty Quantity',
                 'billing-address' => 'Billing Address',
+
+                'booking-cancellation-not-allowed' => [
+                    'title' => 'Articole de rezervare neanulabile',
+                    'description' => 'Această comandă conține produse de rezervare configurate ca neanulabile pentru clienți. Ca administrator, le puteți anula în continuare — clientul nu poate face acest lucru din propria vizualizare a comenzii.',
+                ],
+
                 'cancel' => 'Cancel',
                 'cancel-msg' => 'Are your sure you want to cancel this order',
                 'cancel-success' => 'Order cancelled successfully',
@@ -397,6 +419,8 @@ return [
                 'refund-id' => 'Refund #:refund',
                 'refunded' => 'Refunded',
                 'reorder' => 'Reorder',
+                'reorder-booking-skipped' => 'Produsele de rezervare au fost omise în timpul recomandării. Vă rugăm să le rezervați din nou cu date și intervale de timp noi.',
+                'reorder-customer-missing' => 'Nu se poate recomanda această comandă deoarece clientul asociat nu mai există.',
                 'ship' => 'Ship',
                 'shipment' => 'Shipment #:shipment',
                 'shipments' => 'Shipments',
@@ -730,7 +754,7 @@ return [
                 'done' => 'Done',
                 'order-id' => 'Order Id',
                 'pending' => 'Pending',
-                'price' => 'Price',
+                'product' => 'Produs',
                 'status' => 'Status',
                 'time-slot' => 'Time Slot:',
                 'view-details' => 'View Details',
@@ -1097,6 +1121,18 @@ return [
                         'qty' => 'Qty',
                         'title' => 'Booking Type',
 
+                        'allow-cancellation' => [
+                            'no' => 'Nu',
+                            'title' => 'Permite anularea rezervării',
+                            'yes' => 'Da',
+                        ],
+
+                        'allow-slot-overlap' => [
+                            'no' => 'Nu',
+                            'title' => 'Permite intervale de timp suprapuse',
+                            'yes' => 'Da',
+                        ],
+
                         'available-every-week' => [
                             'no' => 'No',
                             'title' => 'Available Every Week',
@@ -1119,7 +1155,7 @@ return [
                             'break-duration' => 'Break Time b/w Slots (Mins)',
                             'close' => 'Close',
                             'description' => 'Booking Information',
-                            'description-info' => 'According to slots the time duration will be created and visible. And The time duration will be created and displayed according to the slots. It will be unique across all slots and visible on the storefront.',
+                            'description-info' => 'Definiți intervalele de timp disponibile pentru această rezervare. Fiecare interval reprezintă o fereastră de timp rezervabilă afișată clienților în magazin. Intervalele nu trebuie să se suprapună decât dacă este permis explicit.',
                             'edit' => 'Edit',
                             'many' => 'Many Bookings For One Days',
                             'one' => 'One Booking For Many Days',
@@ -1208,7 +1244,7 @@ return [
 
                         'slots' => [
                             'add' => 'Add Slots',
-                            'description-info' => 'According to slots the time duration will be created and visible. And The time duration will be created and displayed according to the slots. It will be unique across all slots and visible on the storefront.',
+                            'description-info' => 'Definiți intervalele de timp disponibile pentru această rezervare. Ferestrele de timp rezervabile vor fi generate pe baza duratei intervalului și a timpului de pauză, și vor fi afișate clienților în magazin.',
                             'save' => 'Save',
                             'title' => 'Slots Time Duration',
                             'unavailable' => 'Unavailable',
@@ -1267,6 +1303,8 @@ return [
                             'type-mismatch' => 'The booking type cannot be changed.',
                             'time-validation' => 'Start time must be less than end time.',
                             'overlap-validation' => 'Time slot overlaps with an existing slot.',
+                            'slot-window-too-short' => 'Una sau mai multe ferestre de slot sunt mai scurte decât durata necesară de :duration minute. Fiecare fereastră trebuie să dureze cel puțin :duration minute.',
+                            'slot-window-too-short-field' => 'Această fereastră trebuie să dureze cel puțin :duration minute.',
                         ],
                     ],
 
@@ -1420,6 +1458,15 @@ return [
                 'value-per-locale' => 'Value Per Locale',
                 'yes' => 'Yes',
 
+                'info' => [
+                    'is-filterable' => 'Adaugă acest atribut la filtrele din bara laterală a categoriei. Tipurile bazate pe opțiuni apar ca bifele; prețul ca glisor de interval.',
+                    'is-configurable' => 'Marchează acest atribut ca axă de variantă (ex.: Culoare, Mărime). Disponibil doar pentru Select. Activarea blochează Valoare per Canal și Valoare per Locale — variantele sunt rezolvate global după id-ul opțiunii.',
+                    'value-per-locale' => 'Stochează o valoare diferită per locale. Nu este aplicabil tipurilor bazate pe opțiuni sau booleene — etichetele lor sunt deja traduse prin tabelul de opțiuni.',
+                    'value-per-channel' => 'Stochează o valoare diferită per canal. Dezactivat când "Folosește pentru a crea produs configurabil" este activ.',
+                    'is-visible-on-front' => 'Afișează acest atribut pe pagina produsului în magazin.',
+                    'is-comparable' => 'Include acest atribut la compararea produselor.',
+                ],
+
                 'option' => [
                     'color' => 'Color Swatch',
                     'dropdown' => 'Dropdown',
@@ -1484,6 +1531,15 @@ return [
                 'value-per-channel' => 'Value Per Channel',
                 'value-per-locale' => 'Value Per Locale',
                 'yes' => 'Yes',
+
+                'info' => [
+                    'is-filterable' => 'Adaugă acest atribut la filtrele din bara laterală a categoriei. Tipurile bazate pe opțiuni apar ca bifele; prețul ca glisor de interval.',
+                    'is-configurable' => 'Marchează acest atribut ca axă de variantă (ex.: Culoare, Mărime). Disponibil doar pentru Select. Activarea blochează Valoare per Canal și Valoare per Locale — variantele sunt rezolvate global după id-ul opțiunii.',
+                    'value-per-locale' => 'Stochează o valoare diferită per locale. Nu este aplicabil tipurilor bazate pe opțiuni sau booleene — etichetele lor sunt deja traduse prin tabelul de opțiuni.',
+                    'value-per-channel' => 'Stochează o valoare diferită per canal. Dezactivat când "Folosește pentru a crea produs configurabil" este activ.',
+                    'is-visible-on-front' => 'Afișează acest atribut pe pagina produsului în magazin.',
+                    'is-comparable' => 'Include acest atribut la compararea produselor.',
+                ],
 
                 'option' => [
                     'color' => 'Color Swatch',
@@ -4802,6 +4858,7 @@ return [
             'table' => [
                 'actions' => 'Actions',
                 'no-records-available' => 'No Records Available.',
+                'no-records-hint' => 'Încercați să ajustați filtrele sau reveniți mai târziu după ce datele sunt adăugate.',
             ],
         ],
 

@@ -216,6 +216,22 @@ return [
                         'none' => 'Yok',
                         'total-amount' => 'Toplam Tutar',
                     ],
+
+                    'booking' => [
+                        'loading' => 'Rezervasyon yapılandırması yükleniyor…',
+                        'config-missing' => 'Bu ürün için rezervasyon yapılandırması eksik.',
+                        'date' => 'Tarih',
+                        'date-from' => 'Başlangıç tarihi',
+                        'date-to' => 'Bitiş tarihi',
+                        'slot' => 'Zaman dilimi',
+                        'select-slot' => 'Bir zaman dilimi seçin',
+                        'no-slots-available' => 'Seçilen tarih için uygun zaman dilimi yok',
+                        'note' => 'Not',
+                        'quantity' => 'Miktar',
+                        'renting-type' => 'Kiralama türü',
+                        'daily' => 'Günlük',
+                        'hourly' => 'Saatlik',
+                    ],
                 ],
 
                 'cart' => [
@@ -348,6 +364,12 @@ return [
             'view' => [
                 'amount-per-unit' => ':amount Birim Başına x :qty Miktar',
                 'billing-address' => 'Fatura Adresi',
+
+                'booking-cancellation-not-allowed' => [
+                    'title' => 'İptal Edilemeyen Rezervasyon Öğeleri',
+                    'description' => 'Bu sipariş, müşteriler için iptal edilemez olarak yapılandırılmış rezervasyon ürünleri içerir. Yönetici olarak bunları yine de iptal edebilirsiniz — müşteri kendi sipariş görünümünden bunu yapamaz.',
+                ],
+
                 'cancel' => 'İptal',
                 'cancel-msg' => 'Bu siparişi iptal etmek istediğinizden emin misiniz',
                 'cancel-success' => 'Sipariş başarıyla iptal edildi',
@@ -397,6 +419,8 @@ return [
                 'refund-id' => 'İade #:refund',
                 'refunded' => 'İade Edildi',
                 'reorder' => 'Yeniden Sipariş Ver',
+                'reorder-booking-skipped' => 'Yeniden sipariş sırasında rezervasyon ürünleri atlandı. Lütfen yeni tarih ve zaman dilimleriyle tekrar rezerve edin.',
+                'reorder-customer-missing' => 'İlişkili müşteri artık mevcut olmadığı için bu sipariş yeniden sipariş edilemez.',
                 'ship' => 'Gönder',
                 'shipment' => 'Gönderim #:shipment',
                 'shipments' => 'Gönderimler',
@@ -730,7 +754,7 @@ return [
                 'done' => 'Tamamlandı',
                 'order-id' => 'Sipariş Kimliği',
                 'pending' => 'Beklemede',
-                'price' => 'Fiyat',
+                'product' => 'Ürün',
                 'status' => 'Durum',
                 'time-slot' => 'Zaman Dilimi:',
                 'view-details' => 'Detayları Görüntüle',
@@ -1097,6 +1121,18 @@ return [
                         'qty' => 'Miktar',
                         'title' => 'Rezervasyon Türü',
 
+                        'allow-cancellation' => [
+                            'no' => 'Hayır',
+                            'title' => 'Rezervasyon iptaline izin ver',
+                            'yes' => 'Evet',
+                        ],
+
+                        'allow-slot-overlap' => [
+                            'no' => 'Hayır',
+                            'title' => 'Çakışan zaman dilimlerine izin ver',
+                            'yes' => 'Evet',
+                        ],
+
                         'available-every-week' => [
                             'no' => 'Hayır',
                             'title' => 'Her Hafta Mevcut',
@@ -1119,7 +1155,7 @@ return [
                             'break-duration' => 'Slotlar Arası Mola Süresi (Dakika)',
                             'close' => 'Kapat',
                             'description' => 'Rezervasyon Bilgisi',
-                            'description-info' => 'Süre, slotlara göre oluşturulacak ve görüntülenecektir. Tüm slotlar arasında benzersiz olacak ve mağaza vitrinde görünecektir',
+                            'description-info' => 'Bu rezervasyon için mevcut zaman dilimlerini tanımlayın. Her dilim, mağazada müşterilere gösterilen rezerve edilebilir bir zaman penceresini temsil eder. Açıkça izin verilmedikçe dilimler çakışmamalıdır.',
                             'edit' => 'Düzenle',
                             'many' => 'Bir Gün İçin Birden Fazla Rezervasyon',
                             'one' => 'Birden Fazla Gün İçin Bir Rezervasyon',
@@ -1208,7 +1244,7 @@ return [
 
                         'slots' => [
                             'add' => 'Slot Ekle',
-                            'description-info' => 'Süre, slotlara göre oluşturulacak ve görüntülenecektir. Tüm slotlar arasında benzersiz olacak ve mağaza vitrinde görünecektir',
+                            'description-info' => 'Bu rezervasyon için mevcut zaman dilimlerini tanımlayın. Rezerve edilebilir zaman pencereleri, dilim süresi ve mola süresine göre oluşturulacak ve mağazada müşterilere gösterilecektir.',
                             'save' => 'Kaydet',
                             'title' => 'Slot Zaman Süresi',
                             'unavailable' => 'Mevcut Değil',
@@ -1267,6 +1303,8 @@ return [
                             'type-mismatch' => 'Rezervasyon türü değiştirilemez.',
                             'time-validation' => 'Başlangıç zamanı, bitiş zamanından küçük olmalıdır.',
                             'overlap-validation' => 'Zaman aralığı mevcut bir aralıkla çakışıyor.',
+                            'slot-window-too-short' => 'Bir veya daha fazla slot penceresi gerekli :duration dakikalık süreden daha kısa. Her pencere en az :duration dakika olmalıdır.',
+                            'slot-window-too-short-field' => 'Bu pencere en az :duration dakika olmalıdır.',
                         ],
                     ],
 
@@ -1420,6 +1458,15 @@ return [
                 'value-per-locale' => 'Yerel Dile Göre Değer',
                 'yes' => 'Evet',
 
+                'info' => [
+                    'is-filterable' => 'Bu özelliği kategori yan panel filtrelerine ekler. Seçenek tabanlı türler onay kutusu olarak, fiyat aralık kaydırıcısı olarak gösterilir.',
+                    'is-configurable' => 'Bu özelliği bir varyant ekseni olarak işaretler (ör. Renk, Beden). Yalnızca Select için kullanılabilir. Etkinleştirmek Value Per Channel ve Value Per Locale\'i kilitler — varyantlar seçenek kimliğiyle global olarak çözümlenir.',
+                    'value-per-locale' => 'Locale başına farklı değer saklar. Seçenek tabanlı veya boolean türler için geçerli değildir — etiketleri zaten seçenek tablosu aracılığıyla çevrilir.',
+                    'value-per-channel' => 'Kanal başına farklı değer saklar. "Use to Create Configurable Product" aktifken devre dışıdır.',
+                    'is-visible-on-front' => 'Bu özelliği mağaza ön yüzündeki ürün sayfasında gösterir.',
+                    'is-comparable' => 'Ürünleri yan yana karşılaştırırken bu özelliği dahil eder.',
+                ],
+
                 'option' => [
                     'color' => 'Renk Örneği',
                     'dropdown' => 'Açılır Menü',
@@ -1484,6 +1531,15 @@ return [
                 'value-per-channel' => 'Kanal Başına Değer',
                 'value-per-locale' => 'Yerel Dil Başına Değer',
                 'yes' => 'Evet',
+
+                'info' => [
+                    'is-filterable' => 'Bu özelliği kategori yan panel filtrelerine ekler. Seçenek tabanlı türler onay kutusu olarak, fiyat aralık kaydırıcısı olarak gösterilir.',
+                    'is-configurable' => 'Bu özelliği bir varyant ekseni olarak işaretler (ör. Renk, Beden). Yalnızca Select için kullanılabilir. Etkinleştirmek Value Per Channel ve Value Per Locale\'i kilitler — varyantlar seçenek kimliğiyle global olarak çözümlenir.',
+                    'value-per-locale' => 'Locale başına farklı değer saklar. Seçenek tabanlı veya boolean türler için geçerli değildir — etiketleri zaten seçenek tablosu aracılığıyla çevrilir.',
+                    'value-per-channel' => 'Kanal başına farklı değer saklar. "Use to Create Configurable Product" aktifken devre dışıdır.',
+                    'is-visible-on-front' => 'Bu özelliği mağaza ön yüzündeki ürün sayfasında gösterir.',
+                    'is-comparable' => 'Ürünleri yan yana karşılaştırırken bu özelliği dahil eder.',
+                ],
 
                 'option' => [
                     'color' => 'Renk Kartelası',
@@ -4802,6 +4858,7 @@ return [
             'table' => [
                 'actions' => 'Eylemler',
                 'no-records-available' => 'Kullanılabilir Kayıt Yok.',
+                'no-records-hint' => 'Filtrelerinizi ayarlayın veya veriler eklendiğinde daha sonra tekrar kontrol edin.',
             ],
         ],
 

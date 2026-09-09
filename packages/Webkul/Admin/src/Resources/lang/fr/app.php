@@ -216,6 +216,22 @@ return [
                         'none' => 'Aucun',
                         'total-amount' => 'Montant total',
                     ],
+
+                    'booking' => [
+                        'loading' => 'Chargement de la configuration de réservation…',
+                        'config-missing' => 'Configuration de réservation manquante pour ce produit.',
+                        'date' => 'Date',
+                        'date-from' => 'Date de début',
+                        'date-to' => 'Date de fin',
+                        'slot' => 'Créneau',
+                        'select-slot' => 'Sélectionner un créneau',
+                        'no-slots-available' => 'Aucun créneau disponible pour la date sélectionnée',
+                        'note' => 'Note',
+                        'quantity' => 'Quantité',
+                        'renting-type' => 'Type de location',
+                        'daily' => 'Journalier',
+                        'hourly' => 'Horaire',
+                    ],
                 ],
 
                 'cart' => [
@@ -348,6 +364,12 @@ return [
             'view' => [
                 'amount-per-unit' => ':amount Par Unité x :qty Quantité',
                 'billing-address' => 'Adresse de facturation',
+
+                'booking-cancellation-not-allowed' => [
+                    'title' => 'Articles de réservation non annulables',
+                    'description' => 'Cette commande contient des produits de réservation configurés comme non annulables pour les clients. En tant qu\'administrateur, vous pouvez toujours les annuler — le client ne peut pas le faire depuis sa propre vue de commande.',
+                ],
+
                 'cancel' => 'Annuler',
                 'cancel-msg' => 'Êtes-vous sûr de vouloir annuler cette commande',
                 'cancel-success' => 'Commande annulée avec succès',
@@ -397,6 +419,8 @@ return [
                 'refund-id' => 'Remboursement #:refund',
                 'refunded' => 'Remboursé',
                 'reorder' => 'Recommander',
+                'reorder-booking-skipped' => 'Les produits de réservation ont été ignorés lors de la nouvelle commande. Veuillez les réserver à nouveau avec de nouvelles dates et plages horaires.',
+                'reorder-customer-missing' => 'Impossible de recommander cette commande car le client associé n\'existe plus.',
                 'ship' => 'Expédier',
                 'shipment' => 'Envoi #:shipment',
                 'shipments' => 'Envois',
@@ -730,7 +754,7 @@ return [
                 'done' => 'Terminé',
                 'order-id' => 'ID de commande',
                 'pending' => 'En attente',
-                'price' => 'Prix',
+                'product' => 'Produit',
                 'status' => 'Statut',
                 'time-slot' => 'Créneau horaire:',
                 'view-details' => 'Voir les détails',
@@ -1097,6 +1121,18 @@ return [
                         'qty' => 'Quantité',
                         'title' => 'Type de réservation',
 
+                        'allow-cancellation' => [
+                            'no' => 'Non',
+                            'title' => 'Autoriser l\'annulation de réservation',
+                            'yes' => 'Oui',
+                        ],
+
+                        'allow-slot-overlap' => [
+                            'no' => 'Non',
+                            'title' => 'Autoriser les créneaux horaires chevauchants',
+                            'yes' => 'Oui',
+                        ],
+
                         'available-every-week' => [
                             'no' => 'Non',
                             'title' => 'Disponible chaque semaine',
@@ -1119,7 +1155,7 @@ return [
                             'break-duration' => 'Temps de pause entre les créneaux (minutes)',
                             'close' => 'Fermer',
                             'description' => 'Informations sur la réservation',
-                            'description-info' => 'La durée sera créée et affichée en fonction des créneaux. Elle sera unique à travers tous les créneaux et visible sur la vitrine du magasin',
+                            'description-info' => 'Définissez les créneaux horaires disponibles pour cette réservation. Chaque créneau représente une fenêtre de temps réservable affichée aux clients sur la vitrine. Les créneaux ne doivent pas se chevaucher sauf autorisation explicite.',
                             'edit' => 'Modifier',
                             'many' => 'Plusieurs réservations pour un jour',
                             'one' => 'Une réservation pour plusieurs jours',
@@ -1208,7 +1244,7 @@ return [
 
                         'slots' => [
                             'add' => 'Ajouter des créneaux',
-                            'description-info' => 'La durée sera créée et affichée en fonction des créneaux. Elle sera unique à travers tous les créneaux et visible sur la vitrine du magasin',
+                            'description-info' => 'Définissez les créneaux horaires disponibles pour cette réservation. Les fenêtres de temps réservables seront générées en fonction de la durée du créneau et du temps de pause, et affichées aux clients sur la vitrine.',
                             'save' => 'Enregistrer',
                             'title' => 'Durée des créneaux',
                             'unavailable' => 'Indisponible',
@@ -1267,6 +1303,8 @@ return [
                             'type-mismatch' => 'Le type de réservation ne peut pas être modifié.',
                             'time-validation' => "L'heure de début doit être inférieure à l'heure de fin.",
                             'overlap-validation' => 'Le créneau horaire chevauche un créneau existant.',
+                            'slot-window-too-short' => 'Une ou plusieurs fenêtres de créneau sont plus courtes que la durée requise de :duration minutes. Chaque fenêtre doit durer au moins :duration minutes.',
+                            'slot-window-too-short-field' => 'Cette fenêtre doit durer au moins :duration minutes.',
                         ],
                     ],
 
@@ -1420,6 +1458,15 @@ return [
                 'value-per-locale' => 'Valeur par localisation',
                 'yes' => 'Oui',
 
+                'info' => [
+                    'is-filterable' => 'Ajoute cet attribut aux filtres de la barre latérale de catégorie. Les types basés sur des options s\'affichent en cases à cocher ; le prix en curseur de plage.',
+                    'is-configurable' => 'Désigne cet attribut comme axe de variante (par ex. Couleur, Taille). Disponible uniquement pour Select. L\'activer verrouille Valeur par Canal et Valeur par Locale — les variantes sont résolues globalement par id d\'option.',
+                    'value-per-locale' => 'Stocker une valeur différente par locale. Non applicable aux types basés sur options ou booléens — leurs libellés sont déjà traduits via la table d\'options.',
+                    'value-per-channel' => 'Stocker une valeur différente par canal. Désactivé quand "Utiliser pour créer un produit configurable" est activé.',
+                    'is-visible-on-front' => 'Afficher cet attribut sur la page du produit dans la boutique.',
+                    'is-comparable' => 'Inclure cet attribut lors de la comparaison de produits.',
+                ],
+
                 'option' => [
                     'color' => 'Nuancier de couleurs',
                     'dropdown' => 'Menu déroulant',
@@ -1484,6 +1531,15 @@ return [
                 'value-per-channel' => 'Valeur par canal',
                 'value-per-locale' => 'Valeur par localisation',
                 'yes' => 'Oui',
+
+                'info' => [
+                    'is-filterable' => 'Ajoute cet attribut aux filtres de la barre latérale de catégorie. Les types basés sur des options s\'affichent en cases à cocher ; le prix en curseur de plage.',
+                    'is-configurable' => 'Désigne cet attribut comme axe de variante (par ex. Couleur, Taille). Disponible uniquement pour Select. L\'activer verrouille Valeur par Canal et Valeur par Locale — les variantes sont résolues globalement par id d\'option.',
+                    'value-per-locale' => 'Stocker une valeur différente par locale. Non applicable aux types basés sur options ou booléens — leurs libellés sont déjà traduits via la table d\'options.',
+                    'value-per-channel' => 'Stocker une valeur différente par canal. Désactivé quand "Utiliser pour créer un produit configurable" est activé.',
+                    'is-visible-on-front' => 'Afficher cet attribut sur la page du produit dans la boutique.',
+                    'is-comparable' => 'Inclure cet attribut lors de la comparaison de produits.',
+                ],
 
                 'option' => [
                     'color' => 'Nuancier de couleurs',
@@ -4802,6 +4858,7 @@ return [
             'table' => [
                 'actions' => 'Actions',
                 'no-records-available' => 'Aucun enregistrement disponible.',
+                'no-records-hint' => 'Essayez d\'ajuster vos filtres, ou revenez plus tard une fois les données ajoutées.',
             ],
         ],
 

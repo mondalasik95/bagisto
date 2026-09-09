@@ -216,6 +216,22 @@ return [
                         'none' => 'Nessuno',
                         'total-amount' => 'Importo Totale',
                     ],
+
+                    'booking' => [
+                        'loading' => 'Caricamento configurazione prenotazione…',
+                        'config-missing' => 'Configurazione di prenotazione mancante per questo prodotto.',
+                        'date' => 'Data',
+                        'date-from' => 'Data inizio',
+                        'date-to' => 'Data fine',
+                        'slot' => 'Fascia',
+                        'select-slot' => 'Seleziona una fascia',
+                        'no-slots-available' => 'Nessuna fascia disponibile per la data selezionata',
+                        'note' => 'Nota',
+                        'quantity' => 'Quantità',
+                        'renting-type' => 'Tipo di noleggio',
+                        'daily' => 'Giornaliero',
+                        'hourly' => 'Orario',
+                    ],
                 ],
 
                 'cart' => [
@@ -348,6 +364,12 @@ return [
             'view' => [
                 'amount-per-unit' => ':amount Per Unità x :qty Quantità',
                 'billing-address' => 'Indirizzo di Fatturazione',
+
+                'booking-cancellation-not-allowed' => [
+                    'title' => 'Articoli di prenotazione non annullabili',
+                    'description' => 'Questo ordine contiene prodotti di prenotazione configurati come non annullabili per i clienti. In qualità di amministratore, puoi comunque annullarli — al cliente è impedito di farlo dalla propria vista dell\'ordine.',
+                ],
+
                 'cancel' => 'Annulla',
                 'cancel-msg' => 'Sei sicuro di voler annullare questo ordine',
                 'cancel-success' => 'Ordine annullato con successo',
@@ -397,6 +419,8 @@ return [
                 'refund-id' => 'Rimborso #:refund',
                 'refunded' => 'Rimborsato',
                 'reorder' => 'Riordina',
+                'reorder-booking-skipped' => 'I prodotti di prenotazione sono stati saltati durante il nuovo ordine. Prenotali di nuovo con date e fasce orarie nuove.',
+                'reorder-customer-missing' => 'Impossibile riordinare questo ordine perché il cliente associato non esiste più.',
                 'ship' => 'Spedisci',
                 'shipment' => 'Spedizione #:shipment',
                 'shipments' => 'Spedizioni',
@@ -730,7 +754,7 @@ return [
                 'done' => 'Fatto',
                 'order-id' => 'ID Ordine',
                 'pending' => 'In Attesa',
-                'price' => 'Prezzo',
+                'product' => 'Prodotto',
                 'status' => 'Stato',
                 'time-slot' => 'Fascia Oraria:',
                 'view-details' => 'Visualizza Dettagli',
@@ -1097,6 +1121,18 @@ return [
                         'qty' => 'Quantità',
                         'title' => 'Tipo di Prenotazione',
 
+                        'allow-cancellation' => [
+                            'no' => 'No',
+                            'title' => 'Consenti cancellazione prenotazione',
+                            'yes' => 'Sì',
+                        ],
+
+                        'allow-slot-overlap' => [
+                            'no' => 'No',
+                            'title' => 'Consenti fasce orarie sovrapposte',
+                            'yes' => 'Sì',
+                        ],
+
                         'available-every-week' => [
                             'no' => 'No',
                             'title' => 'Disponibile Ogni Settimana',
@@ -1119,7 +1155,7 @@ return [
                             'break-duration' => 'Durata della Pausa tra gli Slot (Minuti)',
                             'close' => 'Chiudi',
                             'description' => 'Informazioni sulla Prenotazione',
-                            'description-info' => 'La durata verrà creata e visualizzata in base agli slot. Sarà unica per tutti gli slot e visibile nella vetrina del negozio.',
+                            'description-info' => 'Definisci le fasce orarie disponibili per questa prenotazione. Ogni fascia rappresenta una finestra temporale prenotabile mostrata ai clienti nel negozio. Le fasce non devono sovrapporsi a meno che non sia esplicitamente consentito.',
                             'edit' => 'Modifica',
                             'many' => 'Molte Prenotazioni per un Giorno',
                             'one' => 'Una Prenotazione per Molti Giorni',
@@ -1208,7 +1244,7 @@ return [
 
                         'slots' => [
                             'add' => 'Aggiungi Slot',
-                            'description-info' => 'La durata verrà creata e visualizzata in base agli slot. Sarà unica per tutti gli slot e visibile nella vetrina del negozio.',
+                            'description-info' => 'Definisci le fasce orarie disponibili per questa prenotazione. Le finestre temporali prenotabili verranno generate in base alla durata della fascia e al tempo di pausa, e mostrate ai clienti nel negozio.',
                             'save' => 'Salva',
                             'title' => 'Durata del Tempo degli Slot',
                             'unavailable' => 'Non Disponibile',
@@ -1267,6 +1303,8 @@ return [
                             'type-mismatch' => 'Il tipo di prenotazione non può essere modificato.',
                             'time-validation' => "L'orario di inizio deve essere precedente all'orario di fine.",
                             'overlap-validation' => "L'intervallo di tempo si sovrappone a un intervallo esistente.",
+                            'slot-window-too-short' => 'Una o più finestre di slot sono più brevi della durata richiesta di :duration minuti. Ogni finestra deve durare almeno :duration minuti.',
+                            'slot-window-too-short-field' => 'Questa finestra deve durare almeno :duration minuti.',
                         ],
                     ],
 
@@ -1420,6 +1458,15 @@ return [
                 'value-per-locale' => 'Valore per Lingua',
                 'yes' => 'Sì',
 
+                'info' => [
+                    'is-filterable' => 'Aggiunge questo attributo ai filtri della barra laterale di categoria. I tipi basati su opzioni sono mostrati come caselle; il prezzo come cursore di intervallo.',
+                    'is-configurable' => 'Contrassegna questo attributo come asse di variante (es. Colore, Taglia). Disponibile solo per Select. Abilitarlo blocca Valore per Canale e Valore per Locale — le varianti sono risolte globalmente per id opzione.',
+                    'value-per-locale' => 'Memorizza un valore diverso per locale. Non applicabile ai tipi basati su opzioni o booleani — le loro etichette sono già tradotte tramite la tabella delle opzioni.',
+                    'value-per-channel' => 'Memorizza un valore diverso per canale. Disabilitato quando "Usa per creare prodotto configurabile" è attivo.',
+                    'is-visible-on-front' => 'Mostra questo attributo sulla pagina del prodotto nel negozio.',
+                    'is-comparable' => 'Includi questo attributo nel confronto dei prodotti.',
+                ],
+
                 'option' => [
                     'color' => 'Campione Colore',
                     'dropdown' => 'Menu a Tendina',
@@ -1484,6 +1531,15 @@ return [
                 'value-per-channel' => 'Valore per Canale',
                 'value-per-locale' => 'Valore per Lingua',
                 'yes' => 'Sì',
+
+                'info' => [
+                    'is-filterable' => 'Aggiunge questo attributo ai filtri della barra laterale di categoria. I tipi basati su opzioni sono mostrati come caselle; il prezzo come cursore di intervallo.',
+                    'is-configurable' => 'Contrassegna questo attributo come asse di variante (es. Colore, Taglia). Disponibile solo per Select. Abilitarlo blocca Valore per Canale e Valore per Locale — le varianti sono risolte globalmente per id opzione.',
+                    'value-per-locale' => 'Memorizza un valore diverso per locale. Non applicabile ai tipi basati su opzioni o booleani — le loro etichette sono già tradotte tramite la tabella delle opzioni.',
+                    'value-per-channel' => 'Memorizza un valore diverso per canale. Disabilitato quando "Usa per creare prodotto configurabile" è attivo.',
+                    'is-visible-on-front' => 'Mostra questo attributo sulla pagina del prodotto nel negozio.',
+                    'is-comparable' => 'Includi questo attributo nel confronto dei prodotti.',
+                ],
 
                 'option' => [
                     'color' => 'Campione Colore',
@@ -4802,6 +4858,7 @@ return [
             'table' => [
                 'actions' => 'Azioni',
                 'no-records-available' => 'Nessun Record Disponibile.',
+                'no-records-hint' => 'Prova a regolare i filtri o ricontrolla più tardi una volta aggiunti i dati.',
             ],
         ],
 

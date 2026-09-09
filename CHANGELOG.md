@@ -2,6 +2,70 @@
 
 This changelog consists of the bug & security fixes and new features being included in the releases listed below.
 
+## **v2.3.19 (12th of May 2026)** - *Release*
+
+- #10422 [fixed] - Fixed channel Home Page SEO (and other translatable channel fields: name, description, maintenance mode text) only saving for the admin's UI locale. The channel edit page was missing the locale-switcher dropdown that every other translatable resource (categories, products, CMS pages) uses, so admins had no way to change the per-locale binding away from English. Added the standard locale-switcher dropdown listing every system locale; switching reloads with `?locale=<code>` and the form binds, validates, and saves only that locale's translation row. Admins can pre-fill SEO for any system locale, including locales not yet attached to the channel — translations are stored against the locale code regardless of channel-locale attachment.
+
+- #10490 [fixed] - Fixed product images not being updated when re-importing a CSV with the same SKUs but new image filenames. The Product importer used to skip image processing entirely for already-existing SKUs, so updates were silently ignored. The importer now treats the CSV `images` column as the source of truth on every run: existing image rows and stored files for the affected products are removed before the new images from the CSV are inserted.
+
+- #11294 [fixed] - Fixed a refund-time crash ("Trying to access array offset on value of type null") on orders placed via the PayPal Smart Button. A race condition in the checkout UI left the regular Place Order button briefly visible while the cart's payment method was being switched to `paypal_smart_button`; clicking it created an order with the PayPal method but no captured PayPal `orderID`, so the later refund hit a null `additional` payload. The selected payment method is now tracked client-side immediately on radio change (via a new `payment-method-selected` event) so the Smart Button replaces the Place Order button without waiting for the cart round-trip, the standard `storeOrder` endpoint now rejects carts whose payment method is `paypal_smart_button`, and the refund listener no-ops the PayPal API call when the captured `orderID` is missing so the local refund record still succeeds.
+
+- #11242 [fixed] - Fixed an exception ("Attempt to read property `addresses` on null") when an admin attempted to reorder an order whose customer had since been deleted. The admin reorder action now checks for a missing customer and redirects back to the order view with a clear flash message instead of letting the null reach the create-order page.
+
+## **v2.3.18 (24th of April 2026)** - *Release*
+
+- Added Booking product support to the DataTransfer (import) package. Booking products can now be imported via CSV/XLS/XLSX/XML using a new `booking_options` column that follows the existing pipe/key=value convention (same pattern as `bundle_options` / `configurable_variants`). The column encodes the product-level config, type-specific config, and slot or ticket records in pipe-separated sections. All five booking subtypes are supported: default (one/many), appointment, event (with tickets + translations), rental (daily/hourly), and table. Updated the sample product files in all four formats with one example per booking subtype.
+
+- #11258 [security] - Fixed user enumeration vulnerability (CWE-204) in the customer resend-verification endpoint where a missing null-check leaked email existence via differential HTTP responses. Added rate limiting on the route.
+
+- #11273 [fixed] - Reworked the Sales → Booking → Calendar event detail modal to focus on booking information. Removed the ordered amount (Price), added the product name, and now reuses the same booking attributes (From/Till, Location, Ticket, Number of Bookings, etc.) that are shown in the cart and order views — rendered in the same logical order (When → Where → What → How many). The underlying booking query no longer pulls the grand total and now joins `order_items.additional` and the localized product name.
+
+- #10695 [fixed] - Booking product availability is now visually indicated on the date picker. Weekdays with no slots configured, dates outside the `available_from`/`available_to` window, and dates blocked by `prevent_scheduling_before` are now grayed out in the calendar, so customers no longer have to click each date to check availability. Applies to default, appointment, table, and rental booking types.
+
+- #11263 [fixed] - Fixed the Cancel Order option ignoring the booking `allow_cancellation` flag. The flag is now snapshotted on the `bookings` record at order placement time, so later product edits never affect placed orders. For mixed orders, cancelling now skips only the non-cancellable booking items and cancels the rest — the Cancel button remains available as long as the order has at least one cancellable item. Amber informational banners explain this behaviour on both admin and customer order views, and a separate banner on the product view warns customers before checkout.
+
+- #11262 [fixed] - Fixed booking products allowing checkout beyond available quantity. The `compareOptions` comparator for booking products now matches on booking slot/date/renting-type so repeated additions of the same slot merge into a single cart item, correctly triggering the out-of-stock validation.
+
+- #11261 [fixed] - Fixed the Reorder button being visible in admin and customer order views for booking products that are out of stock. The `Booking` type now implements a proper `isSaleable()` check based on booking quantity, event ticket stock, and the product's availability window. Booking items are also skipped during reorder with an info message, since their original slot data is typically expired.
+
+- #11260 [fixed] - Fixed event booking showing the "sold out" toast when the requested quantity exceeded the available stock. A dedicated `exceeds_available` message is now shown with the remaining ticket count when stock is still available.
+
+- #11259 [fixed] - Fixed the "Start time must be less than end time" toast appearing for valid multi-day slots (e.g., Saturday to Sunday) on default booking products. Time comparison now runs only for same-day slots, and the frontend overlap check handles cross-week ranges correctly.
+
+- #11251 [fixed] - Fixed a system crash when viewing refund details after refunding a table booking product. The `Booking` product type was marked as composite, causing the refund view to look for child items that do not exist.
+
+- #11250 [fixed] - Fixed a system crash when viewing refund details after refunding an appointment booking product, caused by the same composite product misconfiguration.
+
+- #11240 [fixed] - Updated the event booking product page to display the combined ticket price (base product price + ticket type price) so customers can see the actual amount payable per ticket.
+
+- #11239 [fixed] - Fixed incorrect slot selection time and date displayed in the cart, customer orders, and admin section for default booking products. Timestamps are now converted using the configured application timezone to match the slot selected by the customer.
+
+- #11238 [fixed] - Fixed incorrect slot duration and time visibility in the cart, customer orders, and admin section by casting slot timestamps to integer and applying consistent timezone conversion across all booking attribute formatters.
+
+- #11236 [fixed] - Fixed an issue with incorrect slot visibility on the product page for table booking products when the selected weekday or date was out of range.
+
+- #11235 [fixed] - Fixed an issue causing incorrect slot visibility based on selected day and date in appointment booking.
+
+- #11234 [fixed] - Fixed product categories being silently cleared when saving the product while viewing a channel whose root category differs from another channel's. The edit form now preserves categories outside the current channel's tree via hidden inputs so `sync()` no longer drops them.
+
+- #11232 [fixed] - Fixed guest limit and booking slot details not being visible in the cart for table booking products. The cart attributes now include charged-per type (per table/per guest) and guest limit when applicable.
+
+- #11230 [fixed] - Fixed irrelevant slot time displayed in the cart for hourly rental bookings by casting timestamps to integer and applying timezone conversion consistently.
+
+- #10902 [fixed] - Updated appointment booking products to display only available time slots.
+
+- #10739 [fixed] - Fixed booking information not being displayed properly on the product view page when the booking information was edited on the product edit page. Null guards were added so storefront views do not fail when slot relations are missing.
+
+- #10738 [fixed] - Fixed the "Slots Time Duration" functionality not working correctly for the "One Booking for Many Days" default booking configuration. Overlapping multi-day slot ranges are now matched against the selected day of week and cross-day slots are no longer silently dropped by the backend overlap validator.
+
+- #10708 [fixed] - Fixed event booking cart allowing quantity to exceed the ticket limit. A `max-value` constraint was added to the quantity changer based on the ticket's available quantity.
+
+- #10697 [fixed] - Fixed incorrect alert message being shown when a rental product was unavailable. Type-specific error messages are now returned for rental, event, and other booking types.
+
+- #10696 [fixed] - Fixed the end date not being displayed for "One Booking for Many Days" booking products on the storefront. Multi-day slot labels now include the day and date along with the time.
+
+- #10683 [fixed] - Fixed duplicate slot timing being shown for the same day on booking products. The slot calculation helper now deduplicates slots by timestamp and performs sorting once after slot generation completes.
+
 ## **v2.3.17 (13th of April 2026)** - *Release*
 
 * Added support for Romanian language.

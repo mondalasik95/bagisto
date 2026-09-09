@@ -139,6 +139,12 @@ class OrderController extends Controller
     {
         $order = $this->orderRepository->findOrFail($id);
 
+        if (! $order->customer) {
+            session()->flash('error', trans('admin::app.sales.orders.view.reorder-customer-missing'));
+
+            return redirect()->route('admin.sales.orders.view', $id);
+        }
+
         $cart = Cart::createCart([
             'customer' => $order->customer,
             'is_active' => false,
@@ -146,12 +152,24 @@ class OrderController extends Controller
 
         Cart::setCart($cart);
 
+        $skippedBooking = false;
+
         foreach ($order->items as $item) {
+            if ($item->type === 'booking') {
+                $skippedBooking = true;
+
+                continue;
+            }
+
             try {
                 Cart::addProduct($item->product, $item->additional);
             } catch (\Exception $e) {
                 // do nothing
             }
+        }
+
+        if ($skippedBooking) {
+            session()->flash('info', trans('admin::app.sales.orders.view.reorder-booking-skipped'));
         }
 
         return redirect()->route('admin.sales.orders.create', $cart->id);
@@ -164,7 +182,7 @@ class OrderController extends Controller
      */
     public function cancel(int $id)
     {
-        $result = $this->orderRepository->cancel($id);
+        $result = $this->orderRepository->cancel($id, force: true);
 
         if ($result) {
             session()->flash('success', trans('admin::app.sales.orders.view.cancel-success'));

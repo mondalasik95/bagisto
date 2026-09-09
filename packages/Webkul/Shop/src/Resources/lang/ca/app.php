@@ -41,6 +41,7 @@ return [
             'not-activated' => 'La teva activació requereix l’aprovació de l’administrador.',
             'page-title' => 'Inici de sessió del client',
             'password' => 'Contrasenya',
+            'resend-verification' => 'Reenvia el correu de verificació',
             'show-password' => 'Mostrar contrasenya',
             'title' => 'Iniciar sessió',
             'verify-first' => 'Verifica primer el teu compte de correu electrònic.',
@@ -195,6 +196,12 @@ return [
 
                 'view' => [
                     'billing-address' => 'Adreça de Facturació',
+
+                    'booking-cancellation-not-allowed' => [
+                        'title' => 'Els articles de reserva no seran cancel·lats',
+                        'description' => 'Aquesta comanda conté productes de reserva marcats com a no cancel·lables. Cancel·lar la comanda només cancel·larà la resta d\'articles; els articles de reserva es mantindran actius. Si us plau, contacteu amb el suport si necessiteu ajuda amb els articles de reserva.',
+                    ],
+
                     'cancel-btn-title' => 'Cancel·lar',
                     'cancel-confirm-msg' => 'Estàs segur que vols cancel·lar aquesta comanda?',
                     'cancel-error' => 'No es pot cancel·lar la teva comanda.',
@@ -207,6 +214,7 @@ return [
                     'order-id' => 'ID de la Comanda',
                     'page-title' => 'Comanda #:order_id',
                     'payment-method' => 'Mètode de Pagament',
+                    'reorder-booking-skipped' => 'Els productes de reserva s\'han omès durant la nova comanda. Si us plau, reserveu-los de nou amb noves dates i franges horàries.',
                     'reorder-btn-title' => 'Tornar a Comandar',
                     'shipping-address' => 'Adreça d\'Enviament',
                     'shipping-method' => 'Mètode d\'Enviament',
@@ -720,6 +728,11 @@ return [
                     'location' => 'Ubicació',
                     'view-on-map' => 'Veure al mapa',
 
+                    'cancellation-not-allowed' => [
+                        'title' => 'No es permet la cancel·lació',
+                        'description' => 'Una vegada feta aquesta reserva, no es pot cancel·lar. Reviseu els detalls amb cura abans de finalitzar la compra.',
+                    ],
+
                     'default' => [
                         'slot-duration-in-minutes' => ':minutes Minuts',
                         'slot-duration' => 'Durada del slot',
@@ -736,6 +749,16 @@ return [
                     'event' => [
                         'book-your-ticket' => 'Reserva la teva entrada',
                         'title' => 'Esdeveniment el :',
+                        'total-price' => 'Preu total',
+                        'summary-title' => 'La vostra reserva',
+                        'ticket-line' => ':name (:count × :price)',
+                        'base-fee-line' => 'Tarifa base (:count × :price)',
+                        'ticket' => 'entrada',
+                        'tickets' => 'entrades',
+                        'total' => 'Total',
+                        'select-tickets-hint' => 'Seleccioneu les quantitats d\'entrades per veure el total.',
+                        'starting-from' => 'A partir de',
+                        'base-fee-note' => 'Inclou la tarifa base + l\'entrada més barata. El total s\'actualitza segons la selecció d\'entrades.',
                     ],
 
                     'rental' => [
@@ -751,6 +774,18 @@ return [
                         'slot' => 'Slot',
                         'no-slots-available' => 'No hi ha slots disponibles',
                         'to' => 'Fins a',
+                        'summary-title' => 'El vostre lloguer',
+                        'base-rental-fee' => 'Tarifa base del lloguer',
+                        'daily-rate-line' => 'Tarifa diària (:count × :rate)',
+                        'hourly-rate-line' => 'Tarifa per hora (:count × :rate)',
+                        'day' => 'dia',
+                        'days' => 'dies',
+                        'hour' => 'hora',
+                        'hours' => 'hores',
+                        'total' => 'Total',
+                        'select-dates-hint' => 'Seleccioneu les dates de lloguer per veure el total.',
+                        'starting-from' => 'A partir de',
+                        'rental-fee-note' => 'Inclou la tarifa base + la tarifa mínima de lloguer. El total s\'actualitza segons la durada seleccionada.',
                     ],
 
                     'table' => [
@@ -822,23 +857,34 @@ return [
 
             'cart' => [
                 'booking-from' => 'Reserva des de',
+                'booking-location' => 'Ubicació',
                 'booking-till' => 'Reserva fins a',
+                'charged-per' => 'Cobrat per',
                 'daily' => 'Diari',
                 'event-from' => 'Esdeveniment des de',
+                'event-location' => 'Ubicació de l\'esdeveniment',
                 'event-ticket' => 'Entrada per a l\'esdeveniment',
                 'event-till' => 'Esdeveniment fins a',
+                'guest-limit' => 'Límit de convidats per taula',
                 'hourly' => 'Per hores',
 
                 'integrity' => [
                     'event' => [
                         'expired' => 'Aquest esdeveniment ha expirat.',
+                        'exceeds_available' => 'Només hi ha :qty entrades disponibles per a aquest esdeveniment.',
+                        'sold_out' => 'Les entrades per a aquest esdeveniment estan esgotades.',
+                        'ticket_exceeds_available' => 'Només hi ha :qty entrades ":ticket" disponibles.',
+                        'ticket_sold_out' => 'Les entrades ":ticket" estan esgotades.',
                     ],
 
                     'missing_options' => 'Falten opcions per a aquest producte.',
                     'inventory_warning' => 'La quantitat sol·licitada no està disponible, si us plau intenta-ho més tard.',
+                    'rental_unavailable' => 'Aquest producte de lloguer no està disponible per a les dates seleccionades.',
                     'select_hourly_duration' => 'Selecciona una durada d\'una hora.',
                 ],
 
+                'per-guest' => 'Per convidat',
+                'per-table' => 'Per taula',
                 'rent-from' => 'Lloguer des de',
                 'rent-till' => 'Lloguer fins a',
                 'rent-type' => 'Tipus de lloguer',

@@ -41,6 +41,7 @@ return [
             'not-activated' => 'Activarea contului dvs. necesită aprobarea administratorului',
             'page-title' => 'Autentificare client',
             'password' => 'Parolă',
+            'resend-verification' => 'Retrimite emailul de verificare',
             'show-password' => 'Afișează parola',
             'title' => 'Autentificare',
             'verify-first' => 'Verificați mai întâi contul de e-mail.',
@@ -195,6 +196,12 @@ return [
 
                 'view' => [
                     'billing-address' => 'Adresa de facturare',
+
+                    'booking-cancellation-not-allowed' => [
+                        'title' => 'Articolele de rezervare nu vor fi anulate',
+                        'description' => 'Această comandă conține produse de rezervare marcate ca neanulabile. Anularea comenzii va anula doar articolele rămase; articolele de rezervare vor rămâne active. Vă rugăm să contactați asistența dacă aveți nevoie de ajutor cu articolele de rezervare.',
+                    ],
+
                     'cancel-btn-title' => 'Anulează',
                     'cancel-confirm-msg' => 'Sigur doriți să anulați această comandă?',
                     'cancel-error' => 'Comanda dvs. nu poate fi anulată.',
@@ -207,6 +214,7 @@ return [
                     'order-id' => 'ID comandă',
                     'page-title' => 'Comanda #:order_id',
                     'payment-method' => 'Metodă de plată',
+                    'reorder-booking-skipped' => 'Produsele de rezervare au fost omise în timpul recomandării. Vă rugăm să le rezervați din nou cu date și intervale de timp noi.',
                     'reorder-btn-title' => 'Comandă din nou',
                     'shipping-address' => 'Adresa de livrare',
                     'shipping-method' => 'Metodă de expediere',
@@ -720,6 +728,11 @@ return [
                     'location' => 'Locație',
                     'view-on-map' => 'Vezi pe hartă',
 
+                    'cancellation-not-allowed' => [
+                        'title' => 'Anularea nu este permisă',
+                        'description' => 'După efectuarea acestei rezervări, nu poate fi anulată. Vă rugăm să verificați cu atenție detaliile înainte de finalizarea comenzii.',
+                    ],
+
                     'default' => [
                         'slot-duration-in-minutes' => ':minutes Minute',
                         'slot-duration' => 'Durată slot',
@@ -736,6 +749,16 @@ return [
                     'event' => [
                         'book-your-ticket' => 'Rezervă biletul',
                         'title' => 'Eveniment pe:',
+                        'total-price' => 'Preț total',
+                        'summary-title' => 'Rezervarea ta',
+                        'ticket-line' => ':name (:count × :price)',
+                        'base-fee-line' => 'Taxă de bază (:count × :price)',
+                        'ticket' => 'bilet',
+                        'tickets' => 'bilete',
+                        'total' => 'Total',
+                        'select-tickets-hint' => 'Selectează cantitățile de bilete pentru a vedea totalul.',
+                        'starting-from' => 'De la',
+                        'base-fee-note' => 'Include taxa de bază + cel mai ieftin bilet. Totalul se actualizează în funcție de selecția biletelor.',
                     ],
 
                     'rental' => [
@@ -751,6 +774,18 @@ return [
                         'slot' => 'Slot',
                         'no-slots-available' => 'Nu sunt sloturi disponibile',
                         'to' => 'Până la',
+                        'summary-title' => 'Închirierea ta',
+                        'base-rental-fee' => 'Taxă de bază pentru închiriere',
+                        'daily-rate-line' => 'Tarif zilnic (:count × :rate)',
+                        'hourly-rate-line' => 'Tarif orar (:count × :rate)',
+                        'day' => 'zi',
+                        'days' => 'zile',
+                        'hour' => 'oră',
+                        'hours' => 'ore',
+                        'total' => 'Total',
+                        'select-dates-hint' => 'Selectează datele de închiriere pentru a vedea totalul.',
+                        'starting-from' => 'De la',
+                        'rental-fee-note' => 'Include taxa de bază + tariful minim de închiriere. Totalul se actualizează în funcție de durata selectată.',
                     ],
 
                     'table' => [
@@ -822,23 +857,34 @@ return [
 
             'cart' => [
                 'booking-from' => 'Rezervare de la',
+                'booking-location' => 'Locație',
                 'booking-till' => 'Rezervare până la',
+                'charged-per' => 'Taxat per',
                 'daily' => 'Pe zi',
                 'event-from' => 'Eveniment de la',
+                'event-location' => 'Locația evenimentului',
                 'event-ticket' => 'Bilet eveniment',
                 'event-till' => 'Eveniment până la',
+                'guest-limit' => 'Limita de oaspeți per masă',
                 'hourly' => 'Pe oră',
 
                 'integrity' => [
                     'event' => [
                         'expired' => 'Acest eveniment a expirat.',
+                        'exceeds_available' => 'Doar :qty bilete sunt disponibile pentru acest eveniment.',
+                        'sold_out' => 'Biletele pentru acest eveniment sunt epuizate.',
+                        'ticket_exceeds_available' => 'Doar :qty bilete ":ticket" sunt disponibile.',
+                        'ticket_sold_out' => 'Biletele ":ticket" sunt epuizate.',
                     ],
 
                     'missing_options' => 'Opțiunile lipsesc pentru acest produs.',
                     'inventory_warning' => 'Cantitatea solicitată nu este disponibilă, vă rugăm să încercați din nou mai târziu.',
-                    'select_hourly_duration' => 'Selectați o durată de slot de o oră.',
+                    'rental_unavailable' => 'Acest produs de închiriere nu este disponibil pentru datele selectate.',
+                    'select_hourly_duration' => 'Selectează o durată de cel puțin o oră.',
                 ],
 
+                'per-guest' => 'Per oaspete',
+                'per-table' => 'Per masă',
                 'rent-from' => 'Închiriere de la',
                 'rent-till' => 'Închiriere până la',
                 'rent-type' => 'Tip închiriere',

@@ -41,6 +41,7 @@ return [
             'not-activated' => 'Akun Anda memerlukan persetujuan admin untuk aktivasi.',
             'page-title' => 'Masuk Pelanggan',
             'password' => 'Kata Sandi',
+            'resend-verification' => 'Kirim Ulang Email Verifikasi',
             'show-password' => 'Tampilkan Kata Sandi',
             'title' => 'Masuk',
             'verify-first' => 'Harap verifikasi akun email Anda terlebih dahulu.',
@@ -195,6 +196,12 @@ return [
 
                 'view' => [
                     'billing-address' => 'Alamat Tagihan',
+
+                    'booking-cancellation-not-allowed' => [
+                        'title' => 'Item Pemesanan Tidak Akan Dibatalkan',
+                        'description' => 'Pesanan ini berisi produk pemesanan yang ditandai sebagai tidak dapat dibatalkan. Membatalkan pesanan hanya akan membatalkan item yang tersisa; item pemesanan akan tetap aktif. Silakan hubungi dukungan jika Anda memerlukan bantuan dengan item pemesanan.',
+                    ],
+
                     'cancel-btn-title' => 'Batalkan',
                     'cancel-confirm-msg' => 'Apakah Anda yakin ingin membatalkan pesanan ini?',
                     'cancel-error' => 'Pesanan Anda tidak dapat dibatalkan.',
@@ -207,6 +214,7 @@ return [
                     'order-id' => 'ID Pesanan',
                     'page-title' => 'Pesanan #:order_id',
                     'payment-method' => 'Metode Pembayaran',
+                    'reorder-booking-skipped' => 'Produk pemesanan dilewati saat memesan ulang. Silakan pesan ulang dengan tanggal dan slot waktu baru.',
                     'reorder-btn-title' => 'Pesan Ulang',
                     'shipping-address' => 'Alamat Pengiriman',
                     'shipping-method' => 'Metode Pengiriman',
@@ -720,6 +728,11 @@ return [
                     'location' => 'Lokasi',
                     'view-on-map' => 'Lihat di Peta',
 
+                    'cancellation-not-allowed' => [
+                        'title' => 'Pembatalan Tidak Diizinkan',
+                        'description' => 'Setelah pemesanan ini dilakukan, tidak dapat dibatalkan. Harap tinjau detailnya dengan cermat sebelum checkout.',
+                    ],
+
                     'default' => [
                         'slot-duration-in-minutes' => ':minutes Menit',
                         'slot-duration' => 'Durasi Slot',
@@ -736,6 +749,16 @@ return [
                     'event' => [
                         'book-your-ticket' => 'Pesan Tiket Anda',
                         'title' => 'Acara pada :',
+                        'total-price' => 'Total Harga',
+                        'summary-title' => 'Pemesanan Anda',
+                        'ticket-line' => ':name (:count × :price)',
+                        'base-fee-line' => 'Biaya dasar (:count × :price)',
+                        'ticket' => 'tiket',
+                        'tickets' => 'tiket',
+                        'total' => 'Total',
+                        'select-tickets-hint' => 'Pilih jumlah tiket Anda untuk melihat total.',
+                        'starting-from' => 'Mulai dari',
+                        'base-fee-note' => 'Termasuk biaya dasar + tiket termurah. Total akan diperbarui sesuai pilihan tiket.',
                     ],
 
                     'rental' => [
@@ -751,6 +774,18 @@ return [
                         'slot' => 'Slot',
                         'no-slots-available' => 'Tidak ada slot tersedia',
                         'to' => 'Hingga',
+                        'summary-title' => 'Sewa Anda',
+                        'base-rental-fee' => 'Biaya dasar sewa',
+                        'daily-rate-line' => 'Tarif harian (:count × :rate)',
+                        'hourly-rate-line' => 'Tarif per jam (:count × :rate)',
+                        'day' => 'hari',
+                        'days' => 'hari',
+                        'hour' => 'jam',
+                        'hours' => 'jam',
+                        'total' => 'Total',
+                        'select-dates-hint' => 'Pilih tanggal sewa Anda untuk melihat total.',
+                        'starting-from' => 'Mulai dari',
+                        'rental-fee-note' => 'Termasuk biaya dasar + tarif sewa minimum. Total akan diperbarui sesuai durasi yang dipilih.',
                     ],
 
                     'table' => [
@@ -822,23 +857,34 @@ return [
 
             'cart' => [
                 'booking-from' => 'Pemesanan Dari',
+                'booking-location' => 'Lokasi',
                 'booking-till' => 'Pemesanan Hingga',
+                'charged-per' => 'Dikenakan Per',
                 'daily' => 'Harian',
                 'event-from' => 'Acara Dari',
+                'event-location' => 'Lokasi Acara',
                 'event-ticket' => 'Tiket Acara',
                 'event-till' => 'Acara Hingga',
+                'guest-limit' => 'Batas Tamu Per Meja',
                 'hourly' => 'Per Jam',
 
                 'integrity' => [
                     'event' => [
                         'expired' => 'Acara ini telah berakhir.',
+                        'exceeds_available' => 'Hanya :qty tiket tersedia untuk acara ini.',
+                        'sold_out' => 'Tiket untuk acara ini sudah habis terjual.',
+                        'ticket_exceeds_available' => 'Hanya :qty tiket ":ticket" tersedia.',
+                        'ticket_sold_out' => 'Tiket ":ticket" sudah habis.',
                     ],
 
                     'missing_options' => 'Opsi tidak tersedia untuk produk ini.',
                     'inventory_warning' => 'Jumlah yang diminta tidak tersedia, silakan coba lagi nanti.',
-                    'select_hourly_duration' => 'Pilih durasi slot satu jam.',
+                    'rental_unavailable' => 'Produk sewa ini tidak tersedia untuk tanggal yang dipilih.',
+                    'select_hourly_duration' => 'Pilih durasi slot minimal satu jam.',
                 ],
 
+                'per-guest' => 'Per Tamu',
+                'per-table' => 'Per Meja',
                 'rent-from' => 'Sewa Dari',
                 'rent-till' => 'Sewa Hingga',
                 'rent-type' => 'Jenis Sewa',

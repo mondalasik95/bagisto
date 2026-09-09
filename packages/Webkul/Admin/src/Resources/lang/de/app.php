@@ -216,6 +216,22 @@ return [
                         'none' => 'Keine',
                         'total-amount' => 'Gesamtsumme',
                     ],
+
+                    'booking' => [
+                        'loading' => 'Buchungskonfiguration wird geladen…',
+                        'config-missing' => 'Buchungskonfiguration für dieses Produkt fehlt.',
+                        'date' => 'Datum',
+                        'date-from' => 'Von Datum',
+                        'date-to' => 'Bis Datum',
+                        'slot' => 'Zeitfenster',
+                        'select-slot' => 'Zeitfenster auswählen',
+                        'no-slots-available' => 'Für das ausgewählte Datum sind keine Zeitfenster verfügbar',
+                        'note' => 'Anmerkung',
+                        'quantity' => 'Menge',
+                        'renting-type' => 'Mietart',
+                        'daily' => 'Täglich',
+                        'hourly' => 'Stündlich',
+                    ],
                 ],
 
                 'cart' => [
@@ -348,6 +364,12 @@ return [
             'view' => [
                 'amount-per-unit' => ':amount pro Einheit x :qty Menge',
                 'billing-address' => 'Rechnungsadresse',
+
+                'booking-cancellation-not-allowed' => [
+                    'title' => 'Nicht stornierbare Buchungsartikel',
+                    'description' => 'Diese Bestellung enthält Buchungsprodukte, die für Kunden als nicht stornierbar konfiguriert sind. Als Administrator können Sie sie dennoch stornieren — der Kunde kann dies in seiner eigenen Bestellansicht nicht tun.',
+                ],
+
                 'cancel' => 'Abbrechen',
                 'cancel-msg' => 'Sind Sie sicher, dass Sie diese Bestellung stornieren möchten?',
                 'cancel-success' => 'Bestellung erfolgreich storniert',
@@ -397,6 +419,8 @@ return [
                 'refund-id' => 'Rückerstattung #:refund',
                 'refunded' => 'Erstattet',
                 'reorder' => 'Erneut bestellen',
+                'reorder-booking-skipped' => 'Buchungsprodukte wurden bei der Nachbestellung übersprungen. Bitte buchen Sie sie erneut mit neuen Daten und Zeitfenstern.',
+                'reorder-customer-missing' => 'Diese Bestellung kann nicht erneut bestellt werden, da der zugehörige Kunde nicht mehr existiert.',
                 'ship' => 'Versenden',
                 'shipment' => 'Sendung #:shipment',
                 'shipments' => 'Sendungen',
@@ -730,7 +754,7 @@ return [
                 'done' => 'Erledigt',
                 'order-id' => 'Bestellnummer',
                 'pending' => 'Ausstehend',
-                'price' => 'Preis',
+                'product' => 'Produkt',
                 'status' => 'Status',
                 'time-slot' => 'Zeitfenster:',
                 'view-details' => 'Details anzeigen',
@@ -1097,6 +1121,18 @@ return [
                         'qty' => 'Menge',
                         'title' => 'Buchungstyp',
 
+                        'allow-cancellation' => [
+                            'no' => 'Nein',
+                            'title' => 'Buchungsstornierung erlauben',
+                            'yes' => 'Ja',
+                        ],
+
+                        'allow-slot-overlap' => [
+                            'no' => 'Nein',
+                            'title' => 'Überlappende Zeitfenster erlauben',
+                            'yes' => 'Ja',
+                        ],
+
                         'available-every-week' => [
                             'no' => 'Nein',
                             'title' => 'Jede Woche verfügbar',
@@ -1119,7 +1155,7 @@ return [
                             'break-duration' => 'Pausenzeit zwischen Slots (Minuten)',
                             'close' => 'Schließen',
                             'description' => 'Buchungsinformationen',
-                            'description-info' => 'Die Zeitdauer wird gemäß den Slots erstellt und angezeigt. Sie wird über alle Slots hinweg einzigartig sein und im Storefront sichtbar sein.',
+                            'description-info' => 'Definieren Sie die verfügbaren Zeitfenster für diese Buchung. Jedes Zeitfenster stellt ein buchbares Zeitfenster dar, das den Kunden im Shop angezeigt wird. Zeitfenster dürfen sich nicht überschneiden, es sei denn, dies ist ausdrücklich erlaubt.',
                             'edit' => 'Bearbeiten',
                             'many' => 'Viele Buchungen für einen Tag',
                             'one' => 'Eine Buchung für viele Tage',
@@ -1208,7 +1244,7 @@ return [
 
                         'slots' => [
                             'add' => 'Slots hinzufügen',
-                            'description-info' => 'Die Zeitdauer wird gemäß den Slots erstellt und angezeigt. Sie wird über alle Slots hinweg einzigartig sein und im Storefront sichtbar sein.',
+                            'description-info' => 'Definieren Sie die verfügbaren Zeitfenster für diese Buchung. Buchbare Zeitfenster werden basierend auf der Zeitfensterdauer und der Pausenzeit generiert und den Kunden im Shop angezeigt.',
                             'save' => 'Speichern',
                             'title' => 'Slots Zeitdauer',
                             'unavailable' => 'Nicht verfügbar',
@@ -1267,6 +1303,8 @@ return [
                             'type-mismatch' => 'Der Buchungstyp kann nicht geändert werden.',
                             'time-validation' => 'Die Startzeit muss kleiner als die Endzeit sein.',
                             'overlap-validation' => 'Der Zeitraum überschneidet sich mit einem vorhandenen Zeitraum.',
+                            'slot-window-too-short' => 'Ein oder mehrere Slot-Fenster sind kürzer als die erforderliche Dauer von :duration Minuten. Jedes Fenster muss mindestens :duration Minuten lang sein.',
+                            'slot-window-too-short-field' => 'Dieses Fenster muss mindestens :duration Minuten lang sein.',
                         ],
                     ],
 
@@ -1420,6 +1458,15 @@ return [
                 'value-per-locale' => 'Wert pro Sprache',
                 'yes' => 'Ja',
 
+                'info' => [
+                    'is-filterable' => 'Fügt dieses Attribut den Kategorie-Seitenleisten-Filtern hinzu. Optionsbasierte Typen werden als Kontrollkästchen dargestellt; Preis als Schieberegler.',
+                    'is-configurable' => 'Markiert dieses Attribut als Variantenachse (z. B. Farbe, Größe). Nur für Select verfügbar. Aktivieren sperrt Wert pro Kanal und Wert pro Gebietsschema — Varianten werden global über die Options-ID aufgelöst.',
+                    'value-per-locale' => 'Unterschiedlichen Wert pro Gebietsschema speichern. Nicht anwendbar für optionsbasierte oder boolesche Typen — ihre Labels werden bereits über die Optionstabelle übersetzt.',
+                    'value-per-channel' => 'Unterschiedlichen Wert pro Kanal speichern. Deaktiviert, wenn "Zum Erstellen konfigurierbarer Produkte verwenden" aktiviert ist.',
+                    'is-visible-on-front' => 'Dieses Attribut auf der Produktdetailseite im Storefront anzeigen.',
+                    'is-comparable' => 'Dieses Attribut beim Vergleich von Produkten einbeziehen.',
+                ],
+
                 'option' => [
                     'color' => 'Farbschwamm',
                     'dropdown' => 'Dropdown',
@@ -1484,6 +1531,15 @@ return [
                 'value-per-channel' => 'Wert pro Channel',
                 'value-per-locale' => 'Wert pro Locale',
                 'yes' => 'Ja',
+
+                'info' => [
+                    'is-filterable' => 'Fügt dieses Attribut den Kategorie-Seitenleisten-Filtern hinzu. Optionsbasierte Typen werden als Kontrollkästchen dargestellt; Preis als Schieberegler.',
+                    'is-configurable' => 'Markiert dieses Attribut als Variantenachse (z. B. Farbe, Größe). Nur für Select verfügbar. Aktivieren sperrt Wert pro Kanal und Wert pro Gebietsschema — Varianten werden global über die Options-ID aufgelöst.',
+                    'value-per-locale' => 'Unterschiedlichen Wert pro Gebietsschema speichern. Nicht anwendbar für optionsbasierte oder boolesche Typen — ihre Labels werden bereits über die Optionstabelle übersetzt.',
+                    'value-per-channel' => 'Unterschiedlichen Wert pro Kanal speichern. Deaktiviert, wenn "Zum Erstellen konfigurierbarer Produkte verwenden" aktiviert ist.',
+                    'is-visible-on-front' => 'Dieses Attribut auf der Produktdetailseite im Storefront anzeigen.',
+                    'is-comparable' => 'Dieses Attribut beim Vergleich von Produkten einbeziehen.',
+                ],
 
                 'option' => [
                     'color' => 'Farbmuster',
@@ -4802,6 +4858,7 @@ return [
             'table' => [
                 'actions' => 'Aktionen',
                 'no-records-available' => 'Keine Datensätze verfügbar.',
+                'no-records-hint' => 'Passen Sie die Filter an oder schauen Sie später noch einmal vorbei, sobald Daten hinzugefügt wurden.',
             ],
         ],
 

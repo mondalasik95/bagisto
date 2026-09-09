@@ -41,6 +41,7 @@ return [
             'not-activated' => 'आपका सक्रियण व्यवस्थापक स्वीकृति की प्रतीक्षा कर रहा है',
             'page-title' => 'ग्राहक लॉगिन',
             'password' => 'पासवर्ड',
+            'resend-verification' => 'सत्यापन ईमेल पुनः भेजें',
             'show-password' => 'पासवर्ड दिखाएं',
             'title' => 'साइन इन करें',
             'verify-first' => 'पहले अपना ईमेल खाता सत्यापित करें।',
@@ -195,6 +196,12 @@ return [
 
                 'view' => [
                     'billing-address' => 'बिलिंग पता',
+
+                    'booking-cancellation-not-allowed' => [
+                        'title' => 'बुकिंग आइटम रद्द नहीं होंगे',
+                        'description' => 'इस ऑर्डर में गैर-रद्द करने योग्य के रूप में चिह्नित बुकिंग उत्पाद हैं। ऑर्डर रद्द करने पर केवल शेष आइटम रद्द होंगे; बुकिंग आइटम सक्रिय रहेंगे। बुकिंग आइटम में सहायता की आवश्यकता होने पर सपोर्ट से संपर्क करें।',
+                    ],
+
                     'cancel-btn-title' => 'रद्द करें',
                     'cancel-confirm-msg' => 'क्या आप वाकई इस आदेश को रद्द करना चाहते हैं?',
                     'cancel-error' => 'आपका आदेश रद्द नहीं किया जा सकता है।',
@@ -207,6 +214,7 @@ return [
                     'order-id' => 'आदेश आईडी',
                     'page-title' => 'आदेश #:order_id',
                     'payment-method' => 'भुगतान विधि',
+                    'reorder-booking-skipped' => 'पुनः ऑर्डर के दौरान बुकिंग उत्पादों को छोड़ दिया गया। कृपया उन्हें नई तारीख और समय स्लॉट के साथ फिर से बुक करें।',
                     'reorder-btn-title' => 'फिर से आदेश करें',
                     'shipping-address' => 'शिपिंग पता',
                     'shipping-method' => 'शिपिंग विधि',
@@ -720,6 +728,11 @@ return [
                     'location' => 'स्थान',
                     'view-on-map' => 'नक्शे पर देखें',
 
+                    'cancellation-not-allowed' => [
+                        'title' => 'रद्दीकरण की अनुमति नहीं है',
+                        'description' => 'एक बार यह बुकिंग कर दी गई, तो इसे रद्द नहीं किया जा सकता। कृपया चेकआउट से पहले विवरण की सावधानी से समीक्षा करें।',
+                    ],
+
                     'default' => [
                         'slot-duration-in-minutes' => ':minutes मिनट',
                         'slot-duration' => 'स्लॉट अवधि',
@@ -736,6 +749,16 @@ return [
                     'event' => [
                         'book-your-ticket' => 'अपना टिकट बुक करें',
                         'title' => 'कार्यक्रम :',
+                        'total-price' => 'कुल मूल्य',
+                        'summary-title' => 'आपकी बुकिंग',
+                        'ticket-line' => ':name (:count × :price)',
+                        'base-fee-line' => 'बेस शुल्क (:count × :price)',
+                        'ticket' => 'टिकट',
+                        'tickets' => 'टिकट',
+                        'total' => 'कुल',
+                        'select-tickets-hint' => 'कुल देखने के लिए अपनी टिकट मात्रा चुनें।',
+                        'starting-from' => 'शुरू',
+                        'base-fee-note' => 'बेस शुल्क + सबसे सस्ता टिकट शामिल है। कुल आपकी टिकट चयन के अनुसार अपडेट होता है।',
                     ],
 
                     'rental' => [
@@ -751,6 +774,18 @@ return [
                         'slot' => 'स्लॉट',
                         'no-slots-available' => 'कोई स्लॉट उपलब्ध नहीं है',
                         'to' => 'तक',
+                        'summary-title' => 'आपका किराया',
+                        'base-rental-fee' => 'बेस किराया शुल्क',
+                        'daily-rate-line' => 'दैनिक दर (:count × :rate)',
+                        'hourly-rate-line' => 'प्रति घंटा दर (:count × :rate)',
+                        'day' => 'दिन',
+                        'days' => 'दिन',
+                        'hour' => 'घंटा',
+                        'hours' => 'घंटे',
+                        'total' => 'कुल',
+                        'select-dates-hint' => 'कुल देखने के लिए अपनी किराये की तारीखें चुनें।',
+                        'starting-from' => 'शुरू',
+                        'rental-fee-note' => 'बेस शुल्क + न्यूनतम किराया दर शामिल है। कुल आपकी चयनित अवधि के अनुसार अपडेट होता है।',
                     ],
 
                     'table' => [
@@ -822,23 +857,34 @@ return [
 
             'cart' => [
                 'booking-from' => 'बुकिंग से',
+                'booking-location' => 'स्थान',
                 'booking-till' => 'बुकिंग तक',
+                'charged-per' => 'प्रति शुल्क',
                 'daily' => 'दैनिक आधार',
                 'event-from' => 'कार्यक्रम से',
+                'event-location' => 'इवेंट स्थान',
                 'event-ticket' => 'कार्यक्रम टिकट',
                 'event-till' => 'कार्यक्रम तक',
+                'guest-limit' => 'प्रति टेबल अतिथि सीमा',
                 'hourly' => 'घंटे के आधार पर',
 
                 'integrity' => [
                     'event' => [
                         'expired' => 'यह कार्यक्रम समाप्त हो गया है।',
+                        'exceeds_available' => 'इस इवेंट के लिए केवल :qty टिकट उपलब्ध हैं।',
+                        'sold_out' => 'इस इवेंट के टिकट बिक चुके हैं।',
+                        'ticket_exceeds_available' => 'केवल :qty ":ticket" टिकट उपलब्ध हैं।',
+                        'ticket_sold_out' => '":ticket" टिकट बिक चुके हैं।',
                     ],
 
                     'missing_options' => 'इस उत्पाद के लिए विकल्प गायब हैं।',
                     'inventory_warning' => 'अनुरोधित मात्रा उपलब्ध नहीं है, कृपया बाद में पुनः प्रयास करें।',
-                    'select_hourly_duration' => 'एक घंटे की अवधि का चयन करें।',
+                    'rental_unavailable' => 'यह किराये का उत्पाद चयनित तिथियों के लिए उपलब्ध नहीं है।',
+                    'select_hourly_duration' => 'कम से कम एक घंटे की अवधि चुनें।',
                 ],
 
+                'per-guest' => 'प्रति अतिथि',
+                'per-table' => 'प्रति टेबल',
                 'rent-from' => 'किराया से',
                 'rent-till' => 'किराया तक',
                 'rent-type' => 'किराया प्रकार',

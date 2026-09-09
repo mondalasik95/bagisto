@@ -41,6 +41,7 @@ return [
             'not-activated' => 'Hesabınızın aktif edilmesi için yönetici onayı gerekiyor.',
             'page-title' => 'Müşteri Girişi',
             'password' => 'Şifre',
+            'resend-verification' => 'Doğrulama E-postasını Yeniden Gönder',
             'show-password' => 'Şifreyi Göster',
             'title' => 'Oturum Aç',
             'verify-first' => 'Lütfen önce e-posta adresinizi doğrulayın.',
@@ -195,6 +196,12 @@ return [
 
                 'view' => [
                     'billing-address' => 'Fatura Adresi',
+
+                    'booking-cancellation-not-allowed' => [
+                        'title' => 'Rezervasyon öğeleri iptal edilmeyecek',
+                        'description' => 'Bu sipariş, iptal edilemez olarak işaretlenmiş rezervasyon ürünleri içerir. Siparişi iptal etmek yalnızca kalan öğeleri iptal eder; rezervasyon öğeleri aktif kalacaktır. Rezervasyon öğeleriyle ilgili yardıma ihtiyacınız varsa lütfen destek ile iletişime geçin.',
+                    ],
+
                     'cancel-btn-title' => 'İptal Et',
                     'cancel-confirm-msg' => 'Bu siparişi iptal etmek istediğinizden emin misiniz?',
                     'cancel-error' => 'Sipariş iptal edilemez.',
@@ -207,6 +214,7 @@ return [
                     'order-id' => 'Sipariş No',
                     'page-title' => 'Sipariş #:order_id',
                     'payment-method' => 'Ödeme Yöntemi',
+                    'reorder-booking-skipped' => 'Yeniden sipariş sırasında rezervasyon ürünleri atlandı. Lütfen yeni tarih ve zaman dilimleriyle tekrar rezerve edin.',
                     'reorder-btn-title' => 'Tekrar Sipariş Ver',
                     'shipping-address' => 'Teslimat Adresi',
                     'shipping-method' => 'Kargo Yöntemi',
@@ -720,6 +728,11 @@ return [
                     'location' => 'Konum',
                     'view-on-map' => 'Haritada Gör',
 
+                    'cancellation-not-allowed' => [
+                        'title' => 'İptale izin verilmiyor',
+                        'description' => 'Bu rezervasyon yapıldıktan sonra iptal edilemez. Ödemeyi tamamlamadan önce lütfen detayları dikkatlice inceleyin.',
+                    ],
+
                     'default' => [
                         'slot-duration-in-minutes' => ':minutes Dakika',
                         'slot-duration' => 'Süre',
@@ -736,6 +749,16 @@ return [
                     'event' => [
                         'book-your-ticket' => 'Bilet Al',
                         'title' => 'Etkinlik:',
+                        'total-price' => 'Toplam fiyat',
+                        'summary-title' => 'Rezervasyonunuz',
+                        'ticket-line' => ':name (:count × :price)',
+                        'base-fee-line' => 'Temel ücret (:count × :price)',
+                        'ticket' => 'bilet',
+                        'tickets' => 'bilet',
+                        'total' => 'Toplam',
+                        'select-tickets-hint' => 'Toplamı görmek için bilet adetlerinizi seçin.',
+                        'starting-from' => 'Başlangıç',
+                        'base-fee-note' => 'Temel ücret + en ucuz bilet dahildir. Toplam, bilet seçiminize göre güncellenir.',
                     ],
 
                     'rental' => [
@@ -751,6 +774,18 @@ return [
                         'slot' => 'Zaman Aralığı',
                         'no-slots-available' => 'Uygun aralık yok',
                         'to' => 'Bitiş',
+                        'summary-title' => 'Kiralamanız',
+                        'base-rental-fee' => 'Temel kiralama ücreti',
+                        'daily-rate-line' => 'Günlük ücret (:count × :rate)',
+                        'hourly-rate-line' => 'Saatlik ücret (:count × :rate)',
+                        'day' => 'gün',
+                        'days' => 'gün',
+                        'hour' => 'saat',
+                        'hours' => 'saat',
+                        'total' => 'Toplam',
+                        'select-dates-hint' => 'Toplamı görmek için kiralama tarihlerinizi seçin.',
+                        'starting-from' => 'Başlangıç',
+                        'rental-fee-note' => 'Temel ücret + minimum kiralama oranı dahildir. Toplam, seçtiğiniz süreye göre güncellenir.',
                     ],
 
                     'table' => [
@@ -822,23 +857,34 @@ return [
 
             'cart' => [
                 'booking-from' => 'Başlangıç',
+                'booking-location' => 'Konum',
                 'booking-till' => 'Bitiş',
+                'charged-per' => 'Ücret birimi',
                 'daily' => 'Günlük',
                 'event-from' => 'Etkinlik Başlangıcı',
+                'event-location' => 'Etkinlik Konumu',
                 'event-ticket' => 'Etkinlik Bileti',
                 'event-till' => 'Etkinlik Bitişi',
+                'guest-limit' => 'Masa başına misafir limiti',
                 'hourly' => 'Saatlik',
 
                 'integrity' => [
                     'event' => [
                         'expired' => 'Bu etkinliğin süresi doldu.',
+                        'exceeds_available' => 'Bu etkinlik için sadece :qty bilet mevcuttur.',
+                        'sold_out' => 'Bu etkinlik için biletler tükenmiştir.',
+                        'ticket_exceeds_available' => 'Sadece :qty ":ticket" bileti mevcuttur.',
+                        'ticket_sold_out' => '":ticket" biletleri tükenmiştir.',
                     ],
 
                     'missing_options' => 'Seçenekler eksik.',
                     'inventory_warning' => 'Stok yetersiz.',
-                    'select_hourly_duration' => 'Süre seçiniz.',
+                    'rental_unavailable' => 'Bu kiralık ürün seçilen tarihler için mevcut değildir.',
+                    'select_hourly_duration' => 'En az bir saatlik bir süre seçin.',
                 ],
 
+                'per-guest' => 'Misafir başına',
+                'per-table' => 'Masa başına',
                 'rent-from' => 'Kiralama Başlangıcı',
                 'rent-till' => 'Kiralama Bitişi',
                 'rent-type' => 'Kiralama Türü',

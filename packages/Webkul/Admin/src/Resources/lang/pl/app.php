@@ -216,6 +216,22 @@ return [
                         'none' => 'Brak',
                         'total-amount' => 'Całkowita kwota',
                     ],
+
+                    'booking' => [
+                        'loading' => 'Ładowanie konfiguracji rezerwacji…',
+                        'config-missing' => 'Brak konfiguracji rezerwacji dla tego produktu.',
+                        'date' => 'Data',
+                        'date-from' => 'Data od',
+                        'date-to' => 'Data do',
+                        'slot' => 'Slot',
+                        'select-slot' => 'Wybierz slot',
+                        'no-slots-available' => 'Brak dostępnych slotów dla wybranej daty',
+                        'note' => 'Uwaga',
+                        'quantity' => 'Ilość',
+                        'renting-type' => 'Typ wynajmu',
+                        'daily' => 'Dziennie',
+                        'hourly' => 'Godzinowo',
+                    ],
                 ],
 
                 'cart' => [
@@ -348,6 +364,12 @@ return [
             'view' => [
                 'amount-per-unit' => ':amount na jednostkę x :qty Ilość',
                 'billing-address' => 'Adres rozliczeniowy',
+
+                'booking-cancellation-not-allowed' => [
+                    'title' => 'Nieanulowalne pozycje rezerwacji',
+                    'description' => 'To zamówienie zawiera produkty rezerwacyjne skonfigurowane jako nieanulowalne dla klientów. Jako administrator nadal możesz je anulować — klient nie może tego zrobić ze swojego własnego widoku zamówienia.',
+                ],
+
                 'cancel' => 'Anuluj',
                 'cancel-msg' => 'Czy na pewno chcesz anulować to zamówienie',
                 'cancel-success' => 'Zamówienie zostało pomyślnie anulowane',
@@ -397,6 +419,8 @@ return [
                 'refund-id' => 'Zwrot #:refund',
                 'refunded' => 'Zwrócone',
                 'reorder' => 'Zamów ponownie',
+                'reorder-booking-skipped' => 'Produkty rezerwacyjne zostały pominięte podczas ponownego zamawiania. Zarezerwuj je ponownie z nowymi datami i przedziałami czasowymi.',
+                'reorder-customer-missing' => 'Nie można ponownie zamówić tego zamówienia, ponieważ powiązany klient już nie istnieje.',
                 'ship' => 'Wysyłka',
                 'shipment' => 'Przesyłka #:shipment',
                 'shipments' => 'Przesyłki',
@@ -730,7 +754,7 @@ return [
                 'done' => 'Zakończone',
                 'order-id' => 'ID zamówienia',
                 'pending' => 'Oczekujące',
-                'price' => 'Cena',
+                'product' => 'Produkt',
                 'status' => 'Status',
                 'time-slot' => 'Przedział czasowy:',
                 'view-details' => 'Zobacz szczegóły',
@@ -1097,6 +1121,18 @@ return [
                         'qty' => 'Ilość',
                         'title' => 'Typ rezerwacji',
 
+                        'allow-cancellation' => [
+                            'no' => 'Nie',
+                            'title' => 'Zezwalaj na anulowanie rezerwacji',
+                            'yes' => 'Tak',
+                        ],
+
+                        'allow-slot-overlap' => [
+                            'no' => 'Nie',
+                            'title' => 'Zezwalaj na nakładające się przedziały czasowe',
+                            'yes' => 'Tak',
+                        ],
+
                         'available-every-week' => [
                             'no' => 'Nie',
                             'title' => 'Dostępne co tydzień',
@@ -1119,7 +1155,7 @@ return [
                             'break-duration' => 'Czas przerwy między slotami (minuty)',
                             'close' => 'Zamknij',
                             'description' => 'Informacje o rezerwacji',
-                            'description-info' => 'Czas trwania zostanie utworzony i wyświetlony zgodnie ze slotami. Będzie unikalny dla wszystkich slotów i widoczny na witrynie sklepowej',
+                            'description-info' => 'Zdefiniuj dostępne przedziały czasowe dla tej rezerwacji. Każdy przedział reprezentuje okno czasowe dostępne do rezerwacji, widoczne dla klientów w sklepie. Przedziały nie powinny się nakładać, chyba że zostanie to wyraźnie dozwolone.',
                             'edit' => 'Edytuj',
                             'many' => 'Wiele rezerwacji na jeden dzień',
                             'one' => 'Jedna rezerwacja na wiele dni',
@@ -1208,7 +1244,7 @@ return [
 
                         'slots' => [
                             'add' => 'Dodaj sloty',
-                            'description-info' => 'Czas trwania zostanie utworzony i wyświetlony zgodnie ze slotami. Będzie unikalny dla wszystkich slotów i widoczny na witrynie sklepowej',
+                            'description-info' => 'Zdefiniuj dostępne przedziały czasowe dla tej rezerwacji. Okna czasowe dostępne do rezerwacji zostaną wygenerowane na podstawie czasu trwania przedziału i czasu przerwy, i będą wyświetlane klientom w sklepie.',
                             'save' => 'Zapisz',
                             'title' => 'Czas trwania slotów',
                             'unavailable' => 'Niedostępne',
@@ -1267,6 +1303,8 @@ return [
                             'type-mismatch' => 'Nie można zmienić typu rezerwacji.',
                             'time-validation' => 'Czas rozpoczęcia musi być wcześniejszy niż czas zakończenia.',
                             'overlap-validation' => 'Przedział czasowy nakłada się na istniejący przedział.',
+                            'slot-window-too-short' => 'Jedno lub więcej okien slotów jest krótszych niż wymagany czas :duration minut. Każde okno musi obejmować co najmniej :duration minut.',
+                            'slot-window-too-short-field' => 'To okno musi obejmować co najmniej :duration minut.',
                         ],
                     ],
 
@@ -1420,6 +1458,15 @@ return [
                 'value-per-locale' => 'Wartość Na Lokalizację',
                 'yes' => 'Tak',
 
+                'info' => [
+                    'is-filterable' => 'Dodaje ten atrybut do filtrów w bocznym panelu kategorii. Typy oparte na opcjach renderowane są jako checkboxy; cena jako suwak zakresu.',
+                    'is-configurable' => 'Oznacza ten atrybut jako oś wariantu (np. Kolor, Rozmiar). Dostępne tylko dla Select. Włączenie blokuje Value Per Channel i Value Per Locale — warianty są rozwiązywane globalnie po id opcji.',
+                    'value-per-locale' => 'Przechowuj różną wartość dla każdego locale. Nie dotyczy typów opartych na opcjach ani boolean — ich etykiety są już tłumaczone przez tabelę opcji.',
+                    'value-per-channel' => 'Przechowuj różną wartość dla każdego kanału. Wyłączone, gdy "Użyj do utworzenia produktu konfigurowalnego" jest włączone.',
+                    'is-visible-on-front' => 'Wyświetl ten atrybut na stronie produktu w sklepie.',
+                    'is-comparable' => 'Uwzględnij ten atrybut przy porównywaniu produktów.',
+                ],
+
                 'option' => [
                     'color' => 'Próbka Kolorów',
                     'dropdown' => 'Rozwijane Menu',
@@ -1484,6 +1531,15 @@ return [
                 'value-per-channel' => 'Wartość na Kanał',
                 'value-per-locale' => 'Wartość na Lokalizację',
                 'yes' => 'Tak',
+
+                'info' => [
+                    'is-filterable' => 'Dodaje ten atrybut do filtrów w bocznym panelu kategorii. Typy oparte na opcjach renderowane są jako checkboxy; cena jako suwak zakresu.',
+                    'is-configurable' => 'Oznacza ten atrybut jako oś wariantu (np. Kolor, Rozmiar). Dostępne tylko dla Select. Włączenie blokuje Value Per Channel i Value Per Locale — warianty są rozwiązywane globalnie po id opcji.',
+                    'value-per-locale' => 'Przechowuj różną wartość dla każdego locale. Nie dotyczy typów opartych na opcjach ani boolean — ich etykiety są już tłumaczone przez tabelę opcji.',
+                    'value-per-channel' => 'Przechowuj różną wartość dla każdego kanału. Wyłączone, gdy "Użyj do utworzenia produktu konfigurowalnego" jest włączone.',
+                    'is-visible-on-front' => 'Wyświetl ten atrybut na stronie produktu w sklepie.',
+                    'is-comparable' => 'Uwzględnij ten atrybut przy porównywaniu produktów.',
+                ],
 
                 'option' => [
                     'color' => 'Kolor Swatch',
@@ -4802,6 +4858,7 @@ return [
             'table' => [
                 'actions' => 'Akcje',
                 'no-records-available' => 'Brak Dostępnych Rekordów.',
+                'no-records-hint' => 'Spróbuj dostosować filtry lub wróć później, gdy dane zostaną dodane.',
             ],
         ],
 

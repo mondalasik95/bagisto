@@ -41,6 +41,7 @@ return [
             'not-activated' => 'Uw activering wacht op goedkeuring van de beheerder',
             'page-title' => 'Aanmelden',
             'password' => 'Wachtwoord',
+            'resend-verification' => 'Verificatie-e-mail opnieuw verzenden',
             'show-password' => 'Wachtwoord Weergeven',
             'title' => 'Aanmelden',
             'verify-first' => 'Verifieer eerst uw e-mailaccount.',
@@ -195,6 +196,12 @@ return [
 
                 'view' => [
                     'billing-address' => 'Factuuradres',
+
+                    'booking-cancellation-not-allowed' => [
+                        'title' => 'Boekingsitems worden niet geannuleerd',
+                        'description' => 'Deze bestelling bevat boekingsproducten die als niet-annuleerbaar zijn gemarkeerd. Bij annulering worden alleen de resterende items geannuleerd; boekingsitems blijven actief. Neem contact op met de ondersteuning als u hulp nodig heeft met de boekingsitems.',
+                    ],
+
                     'cancel-btn-title' => 'Annuleren',
                     'cancel-confirm-msg' => 'Weet u zeker dat u deze bestelling wilt annuleren?',
                     'cancel-error' => 'Uw bestelling kan niet geannuleerd worden.',
@@ -207,6 +214,7 @@ return [
                     'order-id' => 'Bestelnummer',
                     'page-title' => 'Bestelling #:order_id',
                     'payment-method' => 'Betaalmethode',
+                    'reorder-booking-skipped' => 'Boekingsproducten zijn overgeslagen tijdens het opnieuw bestellen. Boek ze opnieuw met nieuwe datums en tijdsloten.',
                     'reorder-btn-title' => 'Opnieuw bestellen',
                     'shipping-address' => 'Verzendadres',
                     'shipping-method' => 'Verzendmethode',
@@ -720,6 +728,11 @@ return [
                     'location' => 'Locatie',
                     'view-on-map' => 'Bekijk op Kaart',
 
+                    'cancellation-not-allowed' => [
+                        'title' => 'Annulering niet toegestaan',
+                        'description' => 'Na het plaatsen van deze boeking kan deze niet worden geannuleerd. Controleer de details zorgvuldig voordat u afrekent.',
+                    ],
+
                     'default' => [
                         'slot-duration-in-minutes' => ':minutes Minuten',
                         'slot-duration' => 'Slotduur',
@@ -736,6 +749,16 @@ return [
                     'event' => [
                         'book-your-ticket' => 'Boek Uw Ticket',
                         'title' => 'Evenement op :',
+                        'total-price' => 'Totaalprijs',
+                        'summary-title' => 'Jouw boeking',
+                        'ticket-line' => ':name (:count × :price)',
+                        'base-fee-line' => 'Basistarief (:count × :price)',
+                        'ticket' => 'ticket',
+                        'tickets' => 'tickets',
+                        'total' => 'Totaal',
+                        'select-tickets-hint' => 'Selecteer uw ticketaantallen om het totaal te zien.',
+                        'starting-from' => 'Vanaf',
+                        'base-fee-note' => 'Inclusief basistarief + goedkoopste ticket. Het totaal wordt bijgewerkt op basis van de ticketkeuze.',
                     ],
 
                     'rental' => [
@@ -751,6 +774,18 @@ return [
                         'slot' => 'Slot',
                         'no-slots-available' => 'Geen slots beschikbaar',
                         'to' => 'Tot',
+                        'summary-title' => 'Jouw verhuur',
+                        'base-rental-fee' => 'Basishuurtarief',
+                        'daily-rate-line' => 'Dagtarief (:count × :rate)',
+                        'hourly-rate-line' => 'Uurtarief (:count × :rate)',
+                        'day' => 'dag',
+                        'days' => 'dagen',
+                        'hour' => 'uur',
+                        'hours' => 'uur',
+                        'total' => 'Totaal',
+                        'select-dates-hint' => 'Selecteer uw verhuurdata om het totaal te zien.',
+                        'starting-from' => 'Vanaf',
+                        'rental-fee-note' => 'Inclusief basistarief + minimumhuurtarief. Het totaal wordt bijgewerkt op basis van de gekozen duur.',
                     ],
 
                     'table' => [
@@ -822,23 +857,34 @@ return [
 
             'cart' => [
                 'booking-from' => 'Boeking Van',
+                'booking-location' => 'Locatie',
                 'booking-till' => 'Boeking Tot',
+                'charged-per' => 'Kosten per',
                 'daily' => 'Dagelijks',
                 'event-from' => 'Evenement Van',
+                'event-location' => 'Evenementlocatie',
                 'event-ticket' => 'Evenement Ticket',
                 'event-till' => 'Evenement Tot',
+                'guest-limit' => 'Gastenlimiet per tafel',
                 'hourly' => 'Per Uur',
 
                 'integrity' => [
                     'event' => [
                         'expired' => 'Dit evenement is verlopen.',
+                        'exceeds_available' => 'Er zijn slechts :qty tickets beschikbaar voor dit evenement.',
+                        'sold_out' => 'De tickets voor dit evenement zijn uitverkocht.',
+                        'ticket_exceeds_available' => 'Er zijn slechts :qty ":ticket" tickets beschikbaar.',
+                        'ticket_sold_out' => '":ticket" tickets zijn uitverkocht.',
                     ],
 
                     'missing_options' => 'Opties ontbreken voor dit product.',
                     'inventory_warning' => 'De gevraagde hoeveelheid is niet beschikbaar, probeer het later opnieuw.',
-                    'select_hourly_duration' => 'Selecteer een tijdsduur van één uur.',
+                    'rental_unavailable' => 'Dit huurproduct is niet beschikbaar voor de geselecteerde datums.',
+                    'select_hourly_duration' => 'Selecteer een slotduur van minimaal één uur.',
                 ],
 
+                'per-guest' => 'Per gast',
+                'per-table' => 'Per tafel',
                 'rent-from' => 'Huur Van',
                 'rent-till' => 'Huur Tot',
                 'rent-type' => 'Huur Type',

@@ -41,6 +41,7 @@ return [
             'not-activated' => 'درخواست فعال‌سازی حساب شما منتظر تأیید مدیر است',
             'page-title' => 'ورود مشتری',
             'password' => 'رمز عبور',
+            'resend-verification' => 'ارسال مجدد ایمیل تأیید',
             'show-password' => 'نمایش رمز عبور',
             'title' => 'ورود',
             'verify-first' => 'ابتدا حساب ایمیل خود را تأیید کنید.',
@@ -195,6 +196,12 @@ return [
 
                 'view' => [
                     'billing-address' => 'آدرس صورتحساب',
+
+                    'booking-cancellation-not-allowed' => [
+                        'title' => 'موارد رزرو لغو نخواهند شد',
+                        'description' => 'این سفارش شامل محصولات رزرو علامت‌گذاری شده به عنوان غیرقابل لغو است. لغو سفارش تنها موارد باقی‌مانده را لغو می‌کند؛ موارد رزرو فعال باقی می‌مانند. در صورت نیاز به کمک در مورد موارد رزرو با پشتیبانی تماس بگیرید.',
+                    ],
+
                     'cancel-btn-title' => 'لغو',
                     'cancel-confirm-msg' => 'آیا مطمئن هستید که میخواهید این سفارش را لغو کنید؟',
                     'cancel-error' => 'سفارش شما قابل لغو نیست.',
@@ -207,6 +214,7 @@ return [
                     'order-id' => 'شناسه سفارش',
                     'page-title' => 'سفارش #:order_id',
                     'payment-method' => 'روش پرداخت',
+                    'reorder-booking-skipped' => 'محصولات رزرو در سفارش مجدد رد شدند. لطفاً آنها را با تاریخ‌ها و بازه‌های زمانی جدید مجدداً رزرو کنید.',
                     'reorder-btn-title' => 'سفارش مجدد',
                     'shipping-address' => 'آدرس ارسال',
                     'shipping-method' => 'روش حمل و نقل',
@@ -720,6 +728,11 @@ return [
                     'location' => 'مکان',
                     'view-on-map' => 'مشاهده روی نقشه',
 
+                    'cancellation-not-allowed' => [
+                        'title' => 'لغو مجاز نیست',
+                        'description' => 'پس از ثبت این رزرو، نمی‌توان آن را لغو کرد. لطفاً قبل از پرداخت، جزئیات را با دقت بررسی کنید.',
+                    ],
+
                     'default' => [
                         'slot-duration-in-minutes' => ':minutes دقیقه',
                         'slot-duration' => 'مدت زمان اسلات',
@@ -736,6 +749,16 @@ return [
                     'event' => [
                         'book-your-ticket' => 'رزرو بلیط شما',
                         'title' => 'رویداد در :',
+                        'total-price' => 'قیمت کل',
+                        'summary-title' => 'رزرو شما',
+                        'ticket-line' => ':name (:count × :price)',
+                        'base-fee-line' => 'هزینه پایه (:count × :price)',
+                        'ticket' => 'بلیط',
+                        'tickets' => 'بلیط',
+                        'total' => 'مجموع',
+                        'select-tickets-hint' => 'برای مشاهده مجموع، تعداد بلیط‌ها را انتخاب کنید.',
+                        'starting-from' => 'شروع از',
+                        'base-fee-note' => 'شامل هزینه پایه + ارزان‌ترین بلیط. مجموع بر اساس انتخاب بلیط به‌روزرسانی می‌شود.',
                     ],
 
                     'rental' => [
@@ -751,6 +774,18 @@ return [
                         'slot' => 'اسلات',
                         'no-slots-available' => 'هیچ اسلاتی موجود نیست',
                         'to' => 'تا',
+                        'summary-title' => 'اجاره شما',
+                        'base-rental-fee' => 'هزینه پایه اجاره',
+                        'daily-rate-line' => 'نرخ روزانه (:count × :rate)',
+                        'hourly-rate-line' => 'نرخ ساعتی (:count × :rate)',
+                        'day' => 'روز',
+                        'days' => 'روز',
+                        'hour' => 'ساعت',
+                        'hours' => 'ساعت',
+                        'total' => 'مجموع',
+                        'select-dates-hint' => 'برای مشاهده مجموع، تاریخ‌های اجاره را انتخاب کنید.',
+                        'starting-from' => 'شروع از',
+                        'rental-fee-note' => 'شامل هزینه پایه + حداقل نرخ اجاره. مجموع بر اساس مدت انتخابی به‌روزرسانی می‌شود.',
                     ],
 
                     'table' => [
@@ -822,23 +857,34 @@ return [
 
             'cart' => [
                 'booking-from' => 'رزرو از',
+                'booking-location' => 'مکان',
                 'booking-till' => 'رزرو تا',
+                'charged-per' => 'هزینه به ازای',
                 'daily' => 'به صورت روزانه',
                 'event-from' => 'رویداد از',
+                'event-location' => 'مکان رویداد',
                 'event-ticket' => 'بلیط رویداد',
                 'event-till' => 'رویداد تا',
+                'guest-limit' => 'محدودیت مهمان در هر میز',
                 'hourly' => 'به صورت ساعتی',
 
                 'integrity' => [
                     'event' => [
                         'expired' => 'این رویداد منقضی شده است.',
+                        'exceeds_available' => 'فقط :qty بلیط برای این رویداد موجود است.',
+                        'sold_out' => 'بلیت‌های این رویداد تمام شده است.',
+                        'ticket_exceeds_available' => 'فقط :qty بلیط ":ticket" موجود است.',
+                        'ticket_sold_out' => 'بلیط‌های ":ticket" تمام شده است.',
                     ],
 
                     'missing_options' => 'گزینه‌ها برای این محصول وجود ندارند.',
                     'inventory_warning' => 'تعداد درخواستی موجود نیست، لطفاً بعداً دوباره امتحان کنید.',
-                    'select_hourly_duration' => 'یک مدت زمان ساعتی انتخاب کنید.',
+                    'rental_unavailable' => 'این محصول اجاره‌ای برای تاریخ‌های انتخاب شده موجود نیست.',
+                    'select_hourly_duration' => 'حداقل یک ساعت مدت زمان را انتخاب کنید.',
                 ],
 
+                'per-guest' => 'به ازای هر مهمان',
+                'per-table' => 'به ازای هر میز',
                 'rent-from' => 'اجاره از',
                 'rent-till' => 'اجاره تا',
                 'rent-type' => 'نوع اجاره',

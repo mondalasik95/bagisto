@@ -41,6 +41,7 @@ return [
             'not-activated' => 'Ihre Aktivierung erfordert die Zustimmung des Administrators',
             'page-title' => 'Kundenanmeldung',
             'password' => 'Passwort',
+            'resend-verification' => 'Bestätigungs-E-Mail erneut senden',
             'show-password' => 'Passwort anzeigen',
             'title' => 'Anmelden',
             'verify-first' => 'Bitte verifizieren Sie zuerst Ihr E-Mail-Konto.',
@@ -195,6 +196,12 @@ return [
 
                 'view' => [
                     'billing-address' => 'Rechnungsadresse',
+
+                    'booking-cancellation-not-allowed' => [
+                        'title' => 'Buchungsartikel werden nicht storniert',
+                        'description' => 'Diese Bestellung enthält Buchungsprodukte, die als nicht stornierbar markiert sind. Die Stornierung der Bestellung storniert nur die verbleibenden Artikel; Buchungsartikel bleiben aktiv. Bitte kontaktieren Sie den Support, wenn Sie Hilfe bei den Buchungsartikeln benötigen.',
+                    ],
+
                     'cancel-btn-title' => 'Abbrechen',
                     'cancel-confirm-msg' => 'Sind Sie sicher, dass Sie diese Bestellung stornieren möchten?',
                     'cancel-error' => 'Ihre Bestellung kann nicht storniert werden.',
@@ -207,6 +214,7 @@ return [
                     'order-id' => 'Bestellnummer',
                     'page-title' => 'Bestellung #:order_id',
                     'payment-method' => 'Zahlungsmethode',
+                    'reorder-booking-skipped' => 'Buchungsprodukte wurden bei der Nachbestellung übersprungen. Bitte buchen Sie sie erneut mit neuen Daten und Zeitfenstern.',
                     'reorder-btn-title' => 'Erneut bestellen',
                     'shipping-address' => 'Lieferadresse',
                     'shipping-method' => 'Versandmethode',
@@ -720,6 +728,11 @@ return [
                     'location' => 'Ort',
                     'view-on-map' => 'Auf Karte anzeigen',
 
+                    'cancellation-not-allowed' => [
+                        'title' => 'Stornierung nicht erlaubt',
+                        'description' => 'Nach Abschluss dieser Buchung kann sie nicht storniert werden. Bitte überprüfen Sie die Details sorgfältig vor dem Checkout.',
+                    ],
+
                     'default' => [
                         'slot-duration-in-minutes' => ':minutes Minuten',
                         'slot-duration' => 'Slot-Dauer',
@@ -736,6 +749,16 @@ return [
                     'event' => [
                         'book-your-ticket' => 'Buchen Sie Ihr Ticket',
                         'title' => 'Veranstaltung am :',
+                        'total-price' => 'Gesamtpreis',
+                        'summary-title' => 'Ihre Buchung',
+                        'ticket-line' => ':name (:count × :price)',
+                        'base-fee-line' => 'Grundgebühr (:count × :price)',
+                        'ticket' => 'Ticket',
+                        'tickets' => 'Tickets',
+                        'total' => 'Gesamt',
+                        'select-tickets-hint' => 'Wählen Sie die Ticketmengen, um den Gesamtbetrag zu sehen.',
+                        'starting-from' => 'Ab',
+                        'base-fee-note' => 'Enthält Grundgebühr + günstigstes Ticket. Die Summe aktualisiert sich je nach Ticketauswahl.',
                     ],
 
                     'rental' => [
@@ -751,6 +774,18 @@ return [
                         'slot' => 'Slot',
                         'no-slots-available' => 'Keine Slots verfügbar',
                         'to' => 'Bis',
+                        'summary-title' => 'Ihre Miete',
+                        'base-rental-fee' => 'Grundmietgebühr',
+                        'daily-rate-line' => 'Tagessatz (:count × :rate)',
+                        'hourly-rate-line' => 'Stundensatz (:count × :rate)',
+                        'day' => 'Tag',
+                        'days' => 'Tage',
+                        'hour' => 'Stunde',
+                        'hours' => 'Stunden',
+                        'total' => 'Gesamt',
+                        'select-dates-hint' => 'Wählen Sie Ihre Mietdaten, um den Gesamtbetrag zu sehen.',
+                        'starting-from' => 'Ab',
+                        'rental-fee-note' => 'Enthält Grundgebühr + Mindestmietsatz. Die Summe aktualisiert sich je nach gewählter Dauer.',
                     ],
 
                     'table' => [
@@ -822,23 +857,34 @@ return [
 
             'cart' => [
                 'booking-from' => 'Buchung von',
+                'booking-location' => 'Standort',
                 'booking-till' => 'Buchung bis',
+                'charged-per' => 'Berechnet pro',
                 'daily' => 'Tagesbasis',
                 'event-from' => 'Veranstaltung von',
+                'event-location' => 'Veranstaltungsort',
                 'event-ticket' => 'Veranstaltungsticket',
                 'event-till' => 'Veranstaltung bis',
+                'guest-limit' => 'Gästelimit pro Tisch',
                 'hourly' => 'Stundenbasis',
 
                 'integrity' => [
                     'event' => [
                         'expired' => 'Diese Veranstaltung ist abgelaufen.',
+                        'exceeds_available' => 'Nur :qty Tickets sind für diese Veranstaltung verfügbar.',
+                        'sold_out' => 'Die Tickets für diese Veranstaltung sind ausverkauft.',
+                        'ticket_exceeds_available' => 'Nur :qty ":ticket" Tickets sind verfügbar.',
+                        'ticket_sold_out' => '":ticket" Tickets sind ausverkauft.',
                     ],
 
                     'missing_options' => 'Optionen fehlen für dieses Produkt.',
                     'inventory_warning' => 'Die angeforderte Menge ist nicht verfügbar, bitte versuchen Sie es später erneut.',
-                    'select_hourly_duration' => 'Wählen Sie eine Slot-Dauer von einer Stunde.',
+                    'rental_unavailable' => 'Dieses Mietprodukt ist für die ausgewählten Daten nicht verfügbar.',
+                    'select_hourly_duration' => 'Wählen Sie eine Dauer von mindestens einer Stunde.',
                 ],
 
+                'per-guest' => 'Pro Gast',
+                'per-table' => 'Pro Tisch',
                 'rent-from' => 'Mieten von',
                 'rent-till' => 'Mieten bis',
                 'rent-type' => 'Miettyp',

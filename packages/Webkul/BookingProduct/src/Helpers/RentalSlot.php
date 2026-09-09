@@ -40,9 +40,9 @@ class RentalSlot extends Booking
         $rentingType = $data['additional']['booking']['renting_type'] ?? $bookingProduct->rental_slot->renting_type;
 
         if ($rentingType == 'daily') {
-            $from = Carbon::createFromTimeString($data['additional']['booking']['date_from'].' 00:00:01')->getTimestamp();
+            $from = Carbon::createFromTimeString($data['additional']['booking']['date_from'].' 00:00:00')->getTimestamp();
 
-            $to = Carbon::createFromTimeString($data['additional']['booking']['date_to'].' 23:59:59')->getTimestamp();
+            $to = Carbon::createFromTimeString($data['additional']['booking']['date_to'].' 24:00:00')->getTimestamp();
         } else {
             $from = Carbon::createFromTimestamp($data['additional']['booking']['slot']['from'])->getTimestamp();
 
@@ -74,14 +74,31 @@ class RentalSlot extends Booking
         if (isset($cartItem['additional']['booking']['date'])) {
             $timeIntervals = $this->getSlotsByDate($bookingProduct, $cartItem['additional']['booking']['date']);
 
+            $requestedFrom = (int) $cartItem['additional']['booking']['slot']['from'];
+            $requestedTo = (int) $cartItem['additional']['booking']['slot']['to'];
+
+            if ($requestedTo <= $requestedFrom) {
+                return true;
+            }
+
             foreach ($timeIntervals as $timeInterval) {
-                foreach ($timeInterval['slots'] as $slot) {
-                    if (
-                        $slot['from_timestamp'] == $cartItem['additional']['booking']['slot']['from']
-                        && $slot['to_timestamp'] == $cartItem['additional']['booking']['slot']['to']
-                    ) {
-                        return false;
+                $subSlots = $timeInterval['slots'] ?? [];
+
+                $hasFromBoundary = false;
+                $hasToBoundary = false;
+
+                foreach ($subSlots as $slot) {
+                    if ($slot['from_timestamp'] == $requestedFrom) {
+                        $hasFromBoundary = true;
                     }
+
+                    if ($slot['to_timestamp'] == $requestedTo) {
+                        $hasToBoundary = true;
+                    }
+                }
+
+                if ($hasFromBoundary && $hasToBoundary) {
+                    return false;
                 }
             }
 
@@ -89,18 +106,19 @@ class RentalSlot extends Booking
         } else {
             $requestedFromDate = Carbon::createFromTimeString($cartItem['additional']['booking']['date_from'].' 00:00:00');
 
-            $requestedToDate = Carbon::createFromTimeString($cartItem['additional']['booking']['date_to'].' 23:59:59');
+            $requestedToDate = Carbon::createFromTimeString($cartItem['additional']['booking']['date_to'].' 24:00:00');
 
             $availableFrom = ! $bookingProduct->available_every_week && $bookingProduct->available_from
                 ? Carbon::createFromTimeString($bookingProduct->available_from->format('Y-m-d').' 00:00:00')
                 : Carbon::now()->copy()->startOfDay();
 
-            $availableTo = ! $bookingProduct->available_every_week && $bookingProduct->available_from
-                ? Carbon::createFromTimeString($bookingProduct->available_to->format('Y-m-d').' 23:59:59')
+            $availableTo = ! $bookingProduct->available_every_week && $bookingProduct->available_to
+                ? Carbon::createFromTimeString($bookingProduct->available_to->format('Y-m-d').' 24:00:00')
                 : Carbon::createFromTimeString('2080-01-01 00:00:00');
 
             return
-                $requestedFromDate < $availableFrom
+                $requestedToDate <= $requestedFromDate
+                || $requestedFromDate < $availableFrom
                 || $requestedFromDate > $availableTo
                 || $requestedToDate < $availableFrom
                 || $requestedToDate > $availableTo;

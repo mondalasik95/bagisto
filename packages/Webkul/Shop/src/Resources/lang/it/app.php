@@ -41,6 +41,7 @@ return [
             'not-activated' => 'La tua attivazione richiede l’approvazione dell’amministratore',
             'page-title' => 'Accesso Cliente',
             'password' => 'Password',
+            'resend-verification' => 'Reinvia email di verifica',
             'show-password' => 'Mostra Password',
             'title' => 'Accedi',
             'verify-first' => 'Verifica prima il tuo account email.',
@@ -195,6 +196,12 @@ return [
 
                 'view' => [
                     'billing-address' => 'Indirizzo di fatturazione',
+
+                    'booking-cancellation-not-allowed' => [
+                        'title' => 'Gli articoli di prenotazione non verranno annullati',
+                        'description' => 'Questo ordine contiene prodotti di prenotazione contrassegnati come non annullabili. Annullando l\'ordine si annulleranno solo gli articoli rimanenti; gli articoli di prenotazione resteranno attivi. Contatta l\'assistenza se hai bisogno di aiuto con gli articoli di prenotazione.',
+                    ],
+
                     'cancel-btn-title' => 'Annulla',
                     'cancel-confirm-msg' => 'Sei sicuro di voler annullare questo ordine?',
                     'cancel-error' => 'Impossibile annullare il tuo ordine.',
@@ -207,6 +214,7 @@ return [
                     'order-id' => 'ID ordine',
                     'page-title' => 'Ordine #:order_id',
                     'payment-method' => 'Metodo di pagamento',
+                    'reorder-booking-skipped' => 'I prodotti di prenotazione sono stati saltati durante il nuovo ordine. Prenotali di nuovo con date e fasce orarie nuove.',
                     'reorder-btn-title' => 'Riordina',
                     'shipping-address' => 'Indirizzo di spedizione',
                     'shipping-method' => 'Metodo di spedizione',
@@ -720,6 +728,11 @@ return [
                     'location' => 'Posizione',
                     'view-on-map' => 'Visualizza sulla mappa',
 
+                    'cancellation-not-allowed' => [
+                        'title' => 'Cancellazione non consentita',
+                        'description' => 'Una volta effettuata questa prenotazione, non può essere annullata. Rivedi attentamente i dettagli prima del checkout.',
+                    ],
+
                     'default' => [
                         'slot-duration-in-minutes' => ':minutes Minuti',
                         'slot-duration' => 'Durata Slot',
@@ -736,6 +749,16 @@ return [
                     'event' => [
                         'book-your-ticket' => 'Prenota il tuo biglietto',
                         'title' => 'Evento il :',
+                        'total-price' => 'Prezzo totale',
+                        'summary-title' => 'La tua prenotazione',
+                        'ticket-line' => ':name (:count × :price)',
+                        'base-fee-line' => 'Tariffa base (:count × :price)',
+                        'ticket' => 'biglietto',
+                        'tickets' => 'biglietti',
+                        'total' => 'Totale',
+                        'select-tickets-hint' => 'Seleziona le quantità di biglietti per vedere il totale.',
+                        'starting-from' => 'A partire da',
+                        'base-fee-note' => 'Include la tariffa base + il biglietto più economico. Il totale si aggiorna in base alla selezione dei biglietti.',
                     ],
 
                     'rental' => [
@@ -751,6 +774,18 @@ return [
                         'slot' => 'Slot',
                         'no-slots-available' => 'Nessuno slot disponibile',
                         'to' => 'A',
+                        'summary-title' => 'Il tuo noleggio',
+                        'base-rental-fee' => 'Tariffa base di noleggio',
+                        'daily-rate-line' => 'Tariffa giornaliera (:count × :rate)',
+                        'hourly-rate-line' => 'Tariffa oraria (:count × :rate)',
+                        'day' => 'giorno',
+                        'days' => 'giorni',
+                        'hour' => 'ora',
+                        'hours' => 'ore',
+                        'total' => 'Totale',
+                        'select-dates-hint' => 'Seleziona le date di noleggio per vedere il totale.',
+                        'starting-from' => 'A partire da',
+                        'rental-fee-note' => 'Include la tariffa base + la tariffa minima di noleggio. Il totale si aggiorna in base alla durata selezionata.',
                     ],
 
                     'table' => [
@@ -822,23 +857,34 @@ return [
 
             'cart' => [
                 'booking-from' => 'Prenotazione Da',
+                'booking-location' => 'Luogo',
                 'booking-till' => 'Prenotazione Fino',
+                'charged-per' => 'Addebitato per',
                 'daily' => 'Base Giornaliera',
                 'event-from' => 'Evento Da',
+                'event-location' => 'Luogo dell\'evento',
                 'event-ticket' => 'Biglietto Evento',
                 'event-till' => 'Evento Fino',
+                'guest-limit' => 'Limite ospiti per tavolo',
                 'hourly' => 'Base Oraria',
 
                 'integrity' => [
                     'event' => [
                         'expired' => 'Questo evento è scaduto.',
+                        'exceeds_available' => 'Sono disponibili solo :qty biglietti per questo evento.',
+                        'sold_out' => 'I biglietti per questo evento sono esauriti.',
+                        'ticket_exceeds_available' => 'Sono disponibili solo :qty biglietti ":ticket".',
+                        'ticket_sold_out' => 'I biglietti ":ticket" sono esauriti.',
                     ],
 
                     'missing_options' => 'Mancano opzioni per questo prodotto.',
                     'inventory_warning' => 'La quantità richiesta non è disponibile, riprova più tardi.',
+                    'rental_unavailable' => 'Questo prodotto a noleggio non è disponibile per le date selezionate.',
                     'select_hourly_duration' => 'Seleziona una durata di slot di un\'ora.',
                 ],
 
+                'per-guest' => 'Per ospite',
+                'per-table' => 'Per tavolo',
                 'rent-from' => 'Noleggio Da',
                 'rent-till' => 'Noleggio Fino',
                 'rent-type' => 'Tipo di Noleggio',

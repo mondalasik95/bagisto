@@ -216,6 +216,22 @@ return [
                         'none' => 'Cap',
                         'total-amount' => 'Suma total',
                     ],
+
+                    'booking' => [
+                        'loading' => 'Carregant la configuració de la reserva…',
+                        'config-missing' => 'Falta la configuració de reserva per a aquest producte.',
+                        'date' => 'Data',
+                        'date-from' => 'Data d\'inici',
+                        'date-to' => 'Data de fi',
+                        'slot' => 'Franja',
+                        'select-slot' => 'Seleccioneu una franja',
+                        'no-slots-available' => 'No hi ha franges disponibles per a la data seleccionada',
+                        'note' => 'Nota',
+                        'quantity' => 'Quantitat',
+                        'renting-type' => 'Tipus de lloguer',
+                        'daily' => 'Diari',
+                        'hourly' => 'Per hores',
+                    ],
                 ],
 
                 'cart' => [
@@ -348,6 +364,12 @@ return [
             'view' => [
                 'amount-per-unit' => ':amount Per Unitat x :qty Quantitat',
                 'billing-address' => 'Adreça de Facturació',
+
+                'booking-cancellation-not-allowed' => [
+                    'title' => 'Articles de reserva no cancel·lables',
+                    'description' => 'Aquesta comanda conté productes de reserva configurats com a no cancel·lables per als clients. Com a administrador encara els podeu cancel·lar — el client té bloquejada aquesta opció a la seva pròpia vista de comanda.',
+                ],
+
                 'cancel' => 'Cancel·lar',
                 'cancel-msg' => 'Estàs segur que vols cancel·lar aquesta comanda?',
                 'cancel-success' => 'Comanda cancel·lada amb éxit',
@@ -397,6 +419,8 @@ return [
                 'refund-id' => 'Reemborsament #:refund',
                 'refunded' => 'Reemborsat',
                 'reorder' => 'Reordenar',
+                'reorder-booking-skipped' => 'Els productes de reserva s\'han omès durant la nova comanda. Si us plau, reserveu-los de nou amb noves dates i franges horàries.',
+                'reorder-customer-missing' => 'No es pot tornar a comandar aquesta comanda perquè el client associat ja no existeix.',
                 'ship' => 'Enviar',
                 'shipment' => 'Enviament #:shipment',
                 'shipments' => 'Enviaments',
@@ -730,7 +754,7 @@ return [
                 'done' => 'Fet',
                 'order-id' => 'ID de Comanda',
                 'pending' => 'Pendent',
-                'price' => 'Preu',
+                'product' => 'Producte',
                 'status' => 'Estat',
                 'time-slot' => 'Franja Horària:',
                 'view-details' => 'Veure Detalls',
@@ -1097,6 +1121,18 @@ return [
                         'qty' => 'Quantitat',
                         'title' => 'Tipus de Reserva',
 
+                        'allow-cancellation' => [
+                            'no' => 'No',
+                            'title' => 'Permetre la cancel·lació de reserves',
+                            'yes' => 'Sí',
+                        ],
+
+                        'allow-slot-overlap' => [
+                            'no' => 'No',
+                            'title' => 'Permetre franges horàries sobreposades',
+                            'yes' => 'Sí',
+                        ],
+
                         'available-every-week' => [
                             'no' => 'No',
                             'title' => 'Disponible Cada Setmana',
@@ -1119,7 +1155,7 @@ return [
                             'break-duration' => 'Temps de Descans entre Franges (Mins)',
                             'close' => 'Tancar',
                             'description' => 'Informació de la Reserva',
-                            'description-info' => 'Segons les franges horàries, es crearà i es mostrarà la durada del temps. Serà única a totes les franges i es mostrarà a la botiga en línia.',
+                            'description-info' => 'Definiu les franges horàries disponibles per a aquesta reserva. Cada franja representa una finestra de temps reservable que es mostra als clients a la botiga. Les franges no s\'han de sobreposar tret que s\'autoritzi explícitament.',
                             'edit' => 'Editar',
                             'many' => 'Moltes Reserves per a Un Dia',
                             'one' => 'Una Reserva per a Molts Dies',
@@ -1208,7 +1244,7 @@ return [
 
                         'slots' => [
                             'add' => 'Afegir Franges',
-                            'description-info' => 'Segons les franges horàries, es crearà i es mostrarà la durada del temps. Serà única a totes les franges i es mostrarà a la botiga en línia.',
+                            'description-info' => 'Definiu les franges horàries disponibles per a aquesta reserva. Les finestres de temps reservables es generaran en funció de la durada de la franja i el temps de descans, i es mostraran als clients a la botiga.',
                             'save' => 'Desar',
                             'title' => 'Durada de les Franges',
                             'unavailable' => 'No Disponible',
@@ -1267,6 +1303,8 @@ return [
                             'type-mismatch' => 'El tipus de reserva no es pot canviar.',
                             'time-validation' => "L'hora d'inici ha de ser menor que l'hora de finalització.",
                             'overlap-validation' => 'La franja horària se solapa amb una franja existent.',
+                            'slot-window-too-short' => 'Una o més finestres de ranura són més curtes que la durada requerida de :duration minuts. Cada finestra ha d\'abastar almenys :duration minuts.',
+                            'slot-window-too-short-field' => 'Aquesta finestra ha d\'abastar almenys :duration minuts.',
                         ],
                     ],
 
@@ -1420,6 +1458,15 @@ return [
                 'value-per-locale' => 'Valor per',
                 'yes' => 'Sí',
 
+                'info' => [
+                    'is-filterable' => 'Afegeix aquest atribut als filtres laterals de categoria. Els tipus basats en opcions es mostren com caselles; el preu com un control lliscant de rang.',
+                    'is-configurable' => 'Marca aquest atribut com un eix de variant (p. ex. Color, Mida). Només disponible per a Select. Activar-lo bloqueja Valor per Canal i Valor per Localització — les variants es resolen globalment per id d\'opció.',
+                    'value-per-locale' => 'Emmagatzema un valor diferent per localització. No aplicable per a tipus basats en opcions ni booleans — les seves etiquetes ja es tradueixen a la taula d\'opcions.',
+                    'value-per-channel' => 'Emmagatzema un valor diferent per canal. Desactivat quan "Usar per crear producte configurable" està activat.',
+                    'is-visible-on-front' => 'Mostra aquest atribut a la pàgina del producte a la botiga.',
+                    'is-comparable' => 'Inclou aquest atribut quan es comparen productes costat a costat.',
+                ],
+
                 'option' => [
                     'color' => 'Mostra de Color',
                     'dropdown' => 'Desplegable',
@@ -1484,6 +1531,15 @@ return [
                 'value-per-channel' => 'Valor per Canal',
                 'value-per-locale' => 'Valor per Localització',
                 'yes' => 'Sí',
+
+                'info' => [
+                    'is-filterable' => 'Afegeix aquest atribut als filtres laterals de categoria. Els tipus basats en opcions es mostren com caselles; el preu com un control lliscant de rang.',
+                    'is-configurable' => 'Marca aquest atribut com un eix de variant (p. ex. Color, Mida). Només disponible per a Select. Activar-lo bloqueja Valor per Canal i Valor per Localització — les variants es resolen globalment per id d\'opció.',
+                    'value-per-locale' => 'Emmagatzema un valor diferent per localització. No aplicable per a tipus basats en opcions ni booleans — les seves etiquetes ja es tradueixen a la taula d\'opcions.',
+                    'value-per-channel' => 'Emmagatzema un valor diferent per canal. Desactivat quan "Usar per crear producte configurable" està activat.',
+                    'is-visible-on-front' => 'Mostra aquest atribut a la pàgina del producte a la botiga.',
+                    'is-comparable' => 'Inclou aquest atribut quan es comparen productes costat a costat.',
+                ],
 
                 'option' => [
                     'color' => 'Mostra de Color',
@@ -4802,6 +4858,7 @@ return [
             'table' => [
                 'actions' => 'Accions',
                 'no-records-available' => 'No hi ha registres disponibles.',
+                'no-records-hint' => 'Proveu d\'ajustar els filtres o torneu més tard quan s\'hagin afegit dades.',
             ],
         ],
 

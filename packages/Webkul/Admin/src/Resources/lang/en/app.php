@@ -216,6 +216,22 @@ return [
                         'none' => 'None',
                         'total-amount' => 'Total Amount',
                     ],
+
+                    'booking' => [
+                        'loading' => 'Loading booking configuration…',
+                        'config-missing' => 'Booking configuration is missing for this product.',
+                        'date' => 'Date',
+                        'date-from' => 'From Date',
+                        'date-to' => 'To Date',
+                        'slot' => 'Slot',
+                        'select-slot' => 'Select a slot',
+                        'no-slots-available' => 'No slots available for the selected date',
+                        'note' => 'Note',
+                        'quantity' => 'Quantity',
+                        'renting-type' => 'Renting Type',
+                        'daily' => 'Daily',
+                        'hourly' => 'Hourly',
+                    ],
                 ],
 
                 'cart' => [
@@ -348,6 +364,12 @@ return [
             'view' => [
                 'amount-per-unit' => ':amount Per Unit x :qty Quantity',
                 'billing-address' => 'Billing Address',
+
+                'booking-cancellation-not-allowed' => [
+                    'title' => 'Non-Cancellable Booking Items',
+                    'description' => 'This order contains booking products configured as non-cancellable for customers. As an admin you can still cancel them — the customer is blocked from doing so on their own order view.',
+                ],
+
                 'cancel' => 'Cancel',
                 'cancel-msg' => 'Are your sure you want to cancel this order',
                 'cancel-success' => 'Order cancelled successfully',
@@ -397,6 +419,8 @@ return [
                 'refund-id' => 'Refund #:refund',
                 'refunded' => 'Refunded',
                 'reorder' => 'Reorder',
+                'reorder-booking-skipped' => 'Booking products were skipped during reorder. Please book them again with fresh date and time slots.',
+                'reorder-customer-missing' => 'Cannot reorder this order because the associated customer no longer exists.',
                 'ship' => 'Ship',
                 'shipment' => 'Shipment #:shipment',
                 'shipments' => 'Shipments',
@@ -730,7 +754,7 @@ return [
                 'done' => 'Done',
                 'order-id' => 'Order Id',
                 'pending' => 'Pending',
-                'price' => 'Price',
+                'product' => 'Product',
                 'status' => 'Status',
                 'time-slot' => 'Time Slot:',
                 'view-details' => 'View Details',
@@ -1097,6 +1121,18 @@ return [
                         'qty' => 'Qty',
                         'title' => 'Booking Type',
 
+                        'allow-cancellation' => [
+                            'no' => 'No',
+                            'title' => 'Allow Booking Cancellation',
+                            'yes' => 'Yes',
+                        ],
+
+                        'allow-slot-overlap' => [
+                            'no' => 'No',
+                            'title' => 'Allow Overlapping Time Slots',
+                            'yes' => 'Yes',
+                        ],
+
                         'available-every-week' => [
                             'no' => 'No',
                             'title' => 'Available Every Week',
@@ -1119,7 +1155,7 @@ return [
                             'break-duration' => 'Break Time b/w Slots (Mins)',
                             'close' => 'Close',
                             'description' => 'Booking Information',
-                            'description-info' => 'According to slots the time duration will be created and visible. And The time duration will be created and displayed according to the slots. It will be unique across all slots and visible on the storefront.',
+                            'description-info' => 'Define the available time slots for this booking. Each slot represents a bookable time window shown to customers on the storefront. Slots must not overlap unless explicitly allowed.',
                             'edit' => 'Edit',
                             'many' => 'Many Bookings For One Days',
                             'one' => 'One Booking For Many Days',
@@ -1208,7 +1244,7 @@ return [
 
                         'slots' => [
                             'add' => 'Add Slots',
-                            'description-info' => 'According to slots the time duration will be created and visible. And The time duration will be created and displayed according to the slots. It will be unique across all slots and visible on the storefront.',
+                            'description-info' => 'Define the available time slots for this booking. Bookable time windows will be generated based on the slot duration and break time, and displayed to customers on the storefront.',
                             'save' => 'Save',
                             'title' => 'Slots Time Duration',
                             'unavailable' => 'Unavailable',
@@ -1267,6 +1303,8 @@ return [
                             'type-mismatch' => 'The booking type cannot be changed.',
                             'time-validation' => 'Start time must be less than end time.',
                             'overlap-validation' => 'Time slot overlaps with an existing slot.',
+                            'slot-window-too-short' => 'One or more slot windows are shorter than the required :duration-minute duration. Each window must span at least :duration minutes.',
+                            'slot-window-too-short-field' => 'This window must span at least :duration minutes.',
                         ],
                     ],
 
@@ -1420,6 +1458,15 @@ return [
                 'value-per-locale' => 'Value Per Locale',
                 'yes' => 'Yes',
 
+                'info' => [
+                    'is-filterable' => 'Adds this attribute to the category sidebar filters. Option-based types render as checkboxes; price renders as a range slider.',
+                    'is-configurable' => 'Marks this attribute as a variant axis (e.g. Color, Size). Only available for Select. Enabling it locks Value Per Channel and Value Per Locale off — variants are resolved globally by option id.',
+                    'value-per-locale' => 'Store a different value per locale. Not applicable for option-based or boolean types — their labels already translate via the option table.',
+                    'value-per-channel' => 'Store a different value per channel. Disabled when Use to Create Configurable Product is on.',
+                    'is-visible-on-front' => 'Show this attribute on the product view page on the storefront.',
+                    'is-comparable' => 'Include this attribute when comparing products side-by-side.',
+                ],
+
                 'option' => [
                     'color' => 'Color Swatch',
                     'dropdown' => 'Dropdown',
@@ -1484,6 +1531,15 @@ return [
                 'value-per-channel' => 'Value Per Channel',
                 'value-per-locale' => 'Value Per Locale',
                 'yes' => 'Yes',
+
+                'info' => [
+                    'is-filterable' => 'Adds this attribute to the category sidebar filters. Option-based types render as checkboxes; price renders as a range slider.',
+                    'is-configurable' => 'Marks this attribute as a variant axis (e.g. Color, Size). Only available for Select. Enabling it locks Value Per Channel and Value Per Locale off — variants are resolved globally by option id.',
+                    'value-per-locale' => 'Store a different value per locale. Not applicable for option-based or boolean types — their labels already translate via the option table.',
+                    'value-per-channel' => 'Store a different value per channel. Disabled when Use to Create Configurable Product is on.',
+                    'is-visible-on-front' => 'Show this attribute on the product view page on the storefront.',
+                    'is-comparable' => 'Include this attribute when comparing products side-by-side.',
+                ],
 
                 'option' => [
                     'color' => 'Color Swatch',
@@ -4802,6 +4858,7 @@ return [
             'table' => [
                 'actions' => 'Actions',
                 'no-records-available' => 'No Records Available.',
+                'no-records-hint' => 'Try adjusting your filters, or check back later once data is added.',
             ],
         ],
 

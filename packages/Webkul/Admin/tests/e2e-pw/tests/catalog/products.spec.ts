@@ -1921,6 +1921,15 @@ test.describe("booking product management", () => {
                 .selectOption("1");
 
             /**
+             * Narrow the configured slot duration so the short slot windows
+             * below (20 and 25 minutes) satisfy the admin-side
+             * minimum-duration guard.
+             */
+            await adminPage
+                .locator('input[name="booking[duration]"]')
+                .fill("15");
+
+            /**
              * Now adding slots with time duration.
              */
             await adminPage.getByText("Add Slots").first().click();
@@ -2127,8 +2136,7 @@ test.describe("booking product management", () => {
                  */
                 await adminPage
                     .locator(
-                        `.overflow-x-auto > div:nth-child(${
-                            day.status + 1
+                        `.overflow-x-auto > div:nth-child(${day.status + 1
                         }) > div:nth-child(2) > .cursor-pointer`,
                     )
                     .first()
@@ -2307,8 +2315,7 @@ test.describe("booking product management", () => {
                  */
                 await adminPage
                     .locator(
-                        `.overflow-x-auto > div:nth-child(${
-                            day.status + 1
+                        `.overflow-x-auto > div:nth-child(${day.status + 1
                         }) > div:nth-child(2) > .cursor-pointer`,
                     )
                     .first()
@@ -2460,6 +2467,15 @@ test.describe("booking product management", () => {
             await adminPage
                 .locator('select[name="booking[same_slot_all_days]"]')
                 .selectOption("1");
+
+            /**
+             * Narrow the configured slot duration so the short slot windows
+             * below (20 and 25 minutes) satisfy the admin-side
+             * minimum-duration guard.
+             */
+            await adminPage
+                .locator('input[name="booking[duration]"]')
+                .fill("15");
 
             /**
              * Now adding slots with time duration.
@@ -2958,6 +2974,7 @@ test.describe("booking product management", () => {
             await adminPage
                 .getByRole("button", { name: "Save", exact: true })
                 .click();
+
             await adminPage
                 .locator(
                     ".overflow-x-auto > div:nth-child(2) > div > .cursor-pointer",
@@ -2990,9 +3007,10 @@ test.describe("booking product management", () => {
             await adminPage
                 .getByRole("button", { name: "Save", exact: true })
                 .click();
+            await adminPage.waitForTimeout(1000)
             await adminPage
                 .locator("div:nth-child(3) > div > .cursor-pointer")
-                .click();
+                .nth(0).click();
             await adminPage
                 .getByRole("textbox", { name: "From", exact: true })
                 .click();
@@ -3552,8 +3570,11 @@ test.describe("booking product management", () => {
             /**
              * Saving the booking product.
              */
+
+            await adminPage.waitForTimeout(500);
+            
             await adminPage
-                .getByRole("button", { name: "Save Product" })
+                .getByRole("button", { name: "Save Product", exact: true })
                 .click();
         });
 
@@ -3835,8 +3856,10 @@ test.describe("booking product management", () => {
             /**
              * Saving the booking product.
              */
+            await adminPage.waitForTimeout(500);
+
             await adminPage
-                .getByRole("button", { name: "Save Product" })
+                .getByRole("button", { name: "Save Product", exact: true })
                 .click();
         });
     });

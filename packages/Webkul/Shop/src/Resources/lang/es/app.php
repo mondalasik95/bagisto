@@ -41,6 +41,7 @@ return [
             'not-activated' => 'Tu activación requiere la aprobación del administrador.',
             'page-title' => 'Inicio de Sesión del Cliente',
             'password' => 'Contraseña',
+            'resend-verification' => 'Reenviar correo de verificación',
             'show-password' => 'Mostrar Contraseña',
             'title' => 'Iniciar Sesión',
             'verify-first' => 'Verifica primero tu cuenta de correo electrónico.',
@@ -195,6 +196,12 @@ return [
 
                 'view' => [
                     'billing-address' => 'Dirección de Facturación',
+
+                    'booking-cancellation-not-allowed' => [
+                        'title' => 'Los artículos de reserva no se cancelarán',
+                        'description' => 'Este pedido contiene productos de reserva marcados como no cancelables. Al cancelar el pedido solo se cancelarán los artículos restantes; los artículos de reserva seguirán activos. Por favor, contacte con soporte si necesita ayuda con los artículos de reserva.',
+                    ],
+
                     'cancel-btn-title' => 'Cancelar',
                     'cancel-confirm-msg' => '¿Estás seguro de que quieres cancelar este pedido?',
                     'cancel-error' => 'No se puede cancelar tu pedido.',
@@ -207,6 +214,7 @@ return [
                     'order-id' => 'ID de Pedido',
                     'page-title' => 'Pedido #:order_id',
                     'payment-method' => 'Método de Pago',
+                    'reorder-booking-skipped' => 'Los productos de reserva se omitieron durante el reordenamiento. Por favor, resérvelos nuevamente con nuevas fechas y franjas horarias.',
                     'reorder-btn-title' => 'Volver a Pedir',
                     'shipping-address' => 'Dirección de Envío',
                     'shipping-method' => 'Método de Envío',
@@ -720,6 +728,11 @@ return [
                     'location' => 'Ubicación',
                     'view-on-map' => 'Ver en el Mapa',
 
+                    'cancellation-not-allowed' => [
+                        'title' => 'Cancelación no permitida',
+                        'description' => 'Una vez realizada esta reserva, no se puede cancelar. Revise los detalles cuidadosamente antes de finalizar la compra.',
+                    ],
+
                     'default' => [
                         'slot-duration-in-minutes' => ':minutes Minutos',
                         'slot-duration' => 'Duración del Intervalo',
@@ -736,6 +749,16 @@ return [
                     'event' => [
                         'book-your-ticket' => 'Reserva tu Entrada',
                         'title' => 'Evento en :',
+                        'total-price' => 'Precio total',
+                        'summary-title' => 'Su reserva',
+                        'ticket-line' => ':name (:count × :price)',
+                        'base-fee-line' => 'Tarifa base (:count × :price)',
+                        'ticket' => 'entrada',
+                        'tickets' => 'entradas',
+                        'total' => 'Total',
+                        'select-tickets-hint' => 'Seleccione las cantidades de entradas para ver el total.',
+                        'starting-from' => 'Desde',
+                        'base-fee-note' => 'Incluye tarifa base + la entrada más barata. El total se actualiza según la selección de entradas.',
                     ],
 
                     'rental' => [
@@ -751,6 +774,18 @@ return [
                         'slot' => 'Intervalo',
                         'no-slots-available' => 'No hay intervalos disponibles',
                         'to' => 'Hasta',
+                        'summary-title' => 'Su alquiler',
+                        'base-rental-fee' => 'Tarifa base de alquiler',
+                        'daily-rate-line' => 'Tarifa diaria (:count × :rate)',
+                        'hourly-rate-line' => 'Tarifa por hora (:count × :rate)',
+                        'day' => 'día',
+                        'days' => 'días',
+                        'hour' => 'hora',
+                        'hours' => 'horas',
+                        'total' => 'Total',
+                        'select-dates-hint' => 'Seleccione las fechas de alquiler para ver el total.',
+                        'starting-from' => 'Desde',
+                        'rental-fee-note' => 'Incluye tarifa base + tarifa mínima de alquiler. El total se actualiza según la duración seleccionada.',
                     ],
 
                     'table' => [
@@ -822,23 +857,34 @@ return [
 
             'cart' => [
                 'booking-from' => 'Reserva Desde',
+                'booking-location' => 'Ubicación',
                 'booking-till' => 'Reserva Hasta',
+                'charged-per' => 'Cobrado por',
                 'daily' => 'Base Diaria',
                 'event-from' => 'Evento Desde',
+                'event-location' => 'Ubicación del evento',
                 'event-ticket' => 'Entrada para Evento',
                 'event-till' => 'Evento Hasta',
+                'guest-limit' => 'Límite de invitados por mesa',
                 'hourly' => 'Base por Hora',
 
                 'integrity' => [
                     'event' => [
                         'expired' => 'Este evento ha expirado.',
+                        'exceeds_available' => 'Solo hay :qty entradas disponibles para este evento.',
+                        'sold_out' => 'Las entradas para este evento están agotadas.',
+                        'ticket_exceeds_available' => 'Solo hay :qty entradas ":ticket" disponibles.',
+                        'ticket_sold_out' => 'Las entradas ":ticket" están agotadas.',
                     ],
 
                     'missing_options' => 'Faltan opciones para este producto.',
                     'inventory_warning' => 'La cantidad solicitada no está disponible, por favor inténtalo de nuevo más tarde.',
-                    'select_hourly_duration' => 'Selecciona una duración de una hora.',
+                    'rental_unavailable' => 'Este producto de alquiler no está disponible para las fechas seleccionadas.',
+                    'select_hourly_duration' => 'Seleccione una duración de al menos una hora.',
                 ],
 
+                'per-guest' => 'Por invitado',
+                'per-table' => 'Por mesa',
                 'rent-from' => 'Alquiler Desde',
                 'rent-till' => 'Alquiler Hasta',
                 'rent-type' => 'Tipo de Alquiler',

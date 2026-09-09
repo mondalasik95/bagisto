@@ -41,6 +41,7 @@ return [
             'not-activated' => 'アクティベーションは管理者の承認が必要です',
             'page-title' => '顧客ログイン',
             'password' => 'パスワード',
+            'resend-verification' => '確認メールを再送信',
             'show-password' => 'パスワードを表示',
             'title' => 'サインイン',
             'verify-first' => 'まずメールアカウントを確認してください。',
@@ -195,6 +196,12 @@ return [
 
                 'view' => [
                     'billing-address' => '請求先住所',
+
+                    'booking-cancellation-not-allowed' => [
+                        'title' => '予約アイテムはキャンセルされません',
+                        'description' => 'この注文にはキャンセル不可としてマークされた予約商品が含まれています。注文をキャンセルすると残りのアイテムのみがキャンセルされ、予約アイテムはそのまま有効です。予約アイテムについてサポートが必要な場合はお問い合わせください。',
+                    ],
+
                     'cancel-btn-title' => 'キャンセル',
                     'cancel-confirm-msg' => 'この注文をキャンセルしてもよろしいですか？',
                     'cancel-error' => '注文をキャンセルできません。',
@@ -207,6 +214,7 @@ return [
                     'order-id' => '注文ID',
                     'page-title' => '注文 #:order_id',
                     'payment-method' => '支払い方法',
+                    'reorder-booking-skipped' => '再注文時に予約商品はスキップされました。新しい日時のスロットで再予約してください。',
                     'reorder-btn-title' => '再注文',
                     'shipping-address' => '配送先住所',
                     'shipping-method' => '配送方法',
@@ -720,6 +728,11 @@ return [
                     'location' => '場所',
                     'view-on-map' => '地図で見る',
 
+                    'cancellation-not-allowed' => [
+                        'title' => 'キャンセルは許可されていません',
+                        'description' => 'この予約は、一度行うとキャンセルできません。チェックアウトの前に詳細をよくご確認ください。',
+                    ],
+
                     'default' => [
                         'slot-duration-in-minutes' => ':minutes 分',
                         'slot-duration' => 'スロットの期間',
@@ -736,6 +749,16 @@ return [
                     'event' => [
                         'book-your-ticket' => 'チケットを予約する',
                         'title' => 'イベント：',
+                        'total-price' => '合計価格',
+                        'summary-title' => 'ご予約',
+                        'ticket-line' => ':name (:count × :price)',
+                        'base-fee-line' => '基本料金 (:count × :price)',
+                        'ticket' => 'チケット',
+                        'tickets' => 'チケット',
+                        'total' => '合計',
+                        'select-tickets-hint' => 'チケット数を選択すると合計が表示されます。',
+                        'starting-from' => '開始料金',
+                        'base-fee-note' => '基本料金 + 最安チケットを含みます。チケットの選択に応じて合計が更新されます。',
                     ],
 
                     'rental' => [
@@ -751,6 +774,18 @@ return [
                         'slot' => 'スロット',
                         'no-slots-available' => '利用可能なスロットがありません',
                         'to' => 'まで',
+                        'summary-title' => 'あなたのレンタル',
+                        'base-rental-fee' => '基本レンタル料金',
+                        'daily-rate-line' => '日額 (:count × :rate)',
+                        'hourly-rate-line' => '時間料金 (:count × :rate)',
+                        'day' => '日',
+                        'days' => '日',
+                        'hour' => '時間',
+                        'hours' => '時間',
+                        'total' => '合計',
+                        'select-dates-hint' => 'レンタル日を選択すると合計が表示されます。',
+                        'starting-from' => '開始料金',
+                        'rental-fee-note' => '基本料金 + 最小レンタル料金を含みます。選択した期間に応じて合計が更新されます。',
                     ],
 
                     'table' => [
@@ -822,23 +857,34 @@ return [
 
             'cart' => [
                 'booking-from' => '予約開始',
+                'booking-location' => '場所',
                 'booking-till' => '予約終了',
+                'charged-per' => '課金単位',
                 'daily' => '日単位',
                 'event-from' => 'イベント開始',
+                'event-location' => 'イベント会場',
                 'event-ticket' => 'イベントチケット',
                 'event-till' => 'イベント終了',
+                'guest-limit' => 'テーブルあたりのゲスト上限',
                 'hourly' => '時間単位',
 
                 'integrity' => [
                     'event' => [
                         'expired' => 'このイベントは終了しました。',
+                        'exceeds_available' => 'このイベントでは :qty 枚のチケットのみ利用可能です。',
+                        'sold_out' => 'このイベントのチケットは完売しました。',
+                        'ticket_exceeds_available' => '":ticket" のチケットは :qty 枚のみ利用可能です。',
+                        'ticket_sold_out' => '":ticket" のチケットは完売しました。',
                     ],
 
                     'missing_options' => 'この製品にはオプションがありません。',
                     'inventory_warning' => '要求された数量は利用できません。後でやり直してください。',
-                    'select_hourly_duration' => '1時間のスロット期間を選択してください。',
+                    'rental_unavailable' => 'このレンタル商品は選択された日付では利用できません。',
+                    'select_hourly_duration' => '1時間以上のスロット時間を選択してください。',
                 ],
 
+                'per-guest' => 'ゲストあたり',
+                'per-table' => 'テーブルあたり',
                 'rent-from' => 'レンタル開始',
                 'rent-till' => 'レンタル終了',
                 'rent-type' => 'レンタルタイプ',

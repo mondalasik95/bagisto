@@ -41,6 +41,7 @@ return [
             'not-activated' => 'הפעלת החשבון שלך מחכה לאישור מנהל',
             'page-title' => 'התחברות ללקוחות',
             'password' => 'סיסמה',
+            'resend-verification' => 'שלח שוב אימייל אימות',
             'show-password' => 'הצג סיסמה',
             'title' => 'התחברות',
             'verify-first' => 'אנא אמת את חשבון האימייל שלך תחילה.',
@@ -195,6 +196,12 @@ return [
 
                 'view' => [
                     'billing-address' => 'כתובת לחיוב',
+
+                    'booking-cancellation-not-allowed' => [
+                        'title' => 'פריטי הזמנה לא יבוטלו',
+                        'description' => 'הזמנה זו מכילה מוצרי הזמנה המסומנים כלא ניתנים לביטול. ביטול ההזמנה יבטל רק את הפריטים הנותרים; פריטי ההזמנה יישארו פעילים. אנא צרו קשר עם התמיכה אם אתם זקוקים לעזרה עם פריטי ההזמנה.',
+                    ],
+
                     'cancel-btn-title' => 'ביטול',
                     'cancel-confirm-msg' => 'האם אתה בטוח שברצונך לבטל הזמנה זו?',
                     'cancel-error' => 'לא ניתן לבטל את ההזמנה שלך.',
@@ -207,6 +214,7 @@ return [
                     'order-id' => 'מספר הזמנה',
                     'page-title' => 'הזמנה #:order_id',
                     'payment-method' => 'אמצעי תשלום',
+                    'reorder-booking-skipped' => 'מוצרי הזמנה דולגו במהלך ההזמנה מחדש. אנא הזמינו אותם שוב עם תאריכים ומשבצות זמן חדשות.',
                     'reorder-btn-title' => 'הזמן שוב',
                     'shipping-address' => 'כתובת למשלוח',
                     'shipping-method' => 'אמצעי משלוח',
@@ -720,6 +728,11 @@ return [
                     'location' => 'מיקום',
                     'view-on-map' => 'צפה במפה',
 
+                    'cancellation-not-allowed' => [
+                        'title' => 'ביטול אינו מורשה',
+                        'description' => 'לאחר ביצוע ההזמנה, לא ניתן לבטל אותה. אנא בדקו את הפרטים בקפידה לפני התשלום.',
+                    ],
+
                     'default' => [
                         'slot-duration-in-minutes' => ':minutes דקות',
                         'slot-duration' => 'משך זמן',
@@ -736,6 +749,16 @@ return [
                     'event' => [
                         'book-your-ticket' => 'הזמן כרטיס',
                         'title' => 'אירוע ב-:',
+                        'total-price' => 'מחיר כולל',
+                        'summary-title' => 'ההזמנה שלך',
+                        'ticket-line' => ':name (:count × :price)',
+                        'base-fee-line' => 'דמי בסיס (:count × :price)',
+                        'ticket' => 'כרטיס',
+                        'tickets' => 'כרטיסים',
+                        'total' => 'סך הכל',
+                        'select-tickets-hint' => 'בחר את כמויות הכרטיסים כדי לראות את הסכום הכולל.',
+                        'starting-from' => 'החל מ-',
+                        'base-fee-note' => 'כולל דמי בסיס + הכרטיס הזול ביותר. הסכום הכולל מתעדכן לפי בחירת הכרטיסים.',
                     ],
 
                     'rental' => [
@@ -751,6 +774,18 @@ return [
                         'slot' => 'משבצת',
                         'no-slots-available' => 'אין משבצות זמינות',
                         'to' => 'עד',
+                        'summary-title' => 'ההשכרה שלך',
+                        'base-rental-fee' => 'דמי השכרה בסיסיים',
+                        'daily-rate-line' => 'תעריף יומי (:count × :rate)',
+                        'hourly-rate-line' => 'תעריף שעתי (:count × :rate)',
+                        'day' => 'יום',
+                        'days' => 'ימים',
+                        'hour' => 'שעה',
+                        'hours' => 'שעות',
+                        'total' => 'סך הכל',
+                        'select-dates-hint' => 'בחר את תאריכי ההשכרה כדי לראות את הסכום הכולל.',
+                        'starting-from' => 'החל מ-',
+                        'rental-fee-note' => 'כולל דמי בסיס + תעריף השכרה מינימלי. הסכום הכולל מתעדכן לפי משך הזמן שנבחר.',
                     ],
 
                     'table' => [
@@ -822,23 +857,34 @@ return [
 
             'cart' => [
                 'booking-from' => 'הזמנה מ',
+                'booking-location' => 'מיקום',
                 'booking-till' => 'הזמנה עד',
+                'charged-per' => 'חיוב לפי',
                 'daily' => 'בסיס יומי',
                 'event-from' => 'אירוע מ',
+                'event-location' => 'מיקום האירוע',
                 'event-ticket' => 'כרטיס אירוע',
                 'event-till' => 'אירוע עד',
+                'guest-limit' => 'מגבלת אורחים לשולחן',
                 'hourly' => 'בסיס שעתי',
 
                 'integrity' => [
                     'event' => [
                         'expired' => 'האירוע הזה פג תוקף.',
+                        'exceeds_available' => 'רק :qty כרטיסים זמינים לאירוע זה.',
+                        'sold_out' => 'הכרטיסים לאירוע זה אזלו.',
+                        'ticket_exceeds_available' => 'רק :qty כרטיסי ":ticket" זמינים.',
+                        'ticket_sold_out' => 'כרטיסי ":ticket" אזלו.',
                     ],
 
                     'missing_options' => 'אפשרויות חסרות עבור מוצר זה.',
                     'inventory_warning' => 'הכמות המבוקשת אינה זמינה, אנא נסה שוב מאוחר יותר.',
-                    'select_hourly_duration' => 'בחר משבצת זמן של שעה אחת.',
+                    'rental_unavailable' => 'מוצר השכרה זה אינו זמין לתאריכים שנבחרו.',
+                    'select_hourly_duration' => 'בחר משך זמן של שעה אחת לפחות.',
                 ],
 
+                'per-guest' => 'לאורח',
+                'per-table' => 'לשולחן',
                 'rent-from' => 'השכרה מ',
                 'rent-till' => 'השכרה עד',
                 'rent-type' => 'סוג השכרה',

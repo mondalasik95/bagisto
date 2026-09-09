@@ -216,6 +216,22 @@ return [
                         'none' => 'Tidak Ada',
                         'total-amount' => 'Jumlah Total',
                     ],
+
+                    'booking' => [
+                        'loading' => 'Memuat konfigurasi pemesanan…',
+                        'config-missing' => 'Konfigurasi pemesanan tidak tersedia untuk produk ini.',
+                        'date' => 'Tanggal',
+                        'date-from' => 'Dari tanggal',
+                        'date-to' => 'Sampai tanggal',
+                        'slot' => 'Slot',
+                        'select-slot' => 'Pilih slot',
+                        'no-slots-available' => 'Tidak ada slot tersedia untuk tanggal yang dipilih',
+                        'note' => 'Catatan',
+                        'quantity' => 'Jumlah',
+                        'renting-type' => 'Tipe sewa',
+                        'daily' => 'Harian',
+                        'hourly' => 'Per jam',
+                    ],
                 ],
 
                 'cart' => [
@@ -348,6 +364,12 @@ return [
             'view' => [
                 'amount-per-unit' => ':amount per unit x :qty jumlah',
                 'billing-address' => 'Alamat Penagihan',
+
+                'booking-cancellation-not-allowed' => [
+                    'title' => 'Item Pemesanan Tidak Dapat Dibatalkan',
+                    'description' => 'Pesanan ini berisi produk pemesanan yang dikonfigurasi sebagai tidak dapat dibatalkan untuk pelanggan. Sebagai admin, Anda tetap dapat membatalkannya — pelanggan diblokir untuk melakukannya dari tampilan pesanan mereka sendiri.',
+                ],
+
                 'cancel' => 'Batalkan',
                 'cancel-msg' => 'Apakah Anda yakin ingin membatalkan pesanan ini?',
                 'cancel-success' => 'Pesanan berhasil dibatalkan',
@@ -397,6 +419,8 @@ return [
                 'refund-id' => 'Pengembalian #:refund',
                 'refunded' => 'Dikembalikan',
                 'reorder' => 'Pesan Lagi',
+                'reorder-booking-skipped' => 'Produk pemesanan dilewati saat memesan ulang. Silakan pesan ulang dengan tanggal dan slot waktu baru.',
+                'reorder-customer-missing' => 'Tidak dapat memesan ulang pesanan ini karena pelanggan terkait tidak lagi ada.',
                 'ship' => 'Kirim',
                 'shipment' => 'Pengiriman #:shipment',
                 'shipments' => 'Pengiriman',
@@ -730,7 +754,7 @@ return [
                 'done' => 'Selesai',
                 'order-id' => 'ID Pesanan',
                 'pending' => 'Menunggu',
-                'price' => 'Harga',
+                'product' => 'Produk',
                 'status' => 'Status',
                 'time-slot' => 'Slot Waktu:',
                 'view-details' => 'Lihat Detail',
@@ -1097,6 +1121,18 @@ return [
                         'qty' => 'Jumlah',
                         'title' => 'Tipe Booking',
 
+                        'allow-cancellation' => [
+                            'no' => 'Tidak',
+                            'title' => 'Izinkan Pembatalan Pemesanan',
+                            'yes' => 'Ya',
+                        ],
+
+                        'allow-slot-overlap' => [
+                            'no' => 'Tidak',
+                            'title' => 'Izinkan Slot Waktu Tumpang Tindih',
+                            'yes' => 'Ya',
+                        ],
+
                         'available-every-week' => [
                             'no' => 'Tidak',
                             'title' => 'Tersedia Setiap Minggu',
@@ -1119,7 +1155,7 @@ return [
                             'break-duration' => 'Durasi Istirahat antar Slot (Menit)',
                             'close' => 'Tutup',
                             'description' => 'Informasi Booking',
-                            'description-info' => 'Durasi waktu akan dibuat dan ditampilkan berdasarkan slot yang tersedia. Ini akan unik di semua slot dan terlihat di halaman toko.',
+                            'description-info' => 'Tentukan slot waktu yang tersedia untuk pemesanan ini. Setiap slot mewakili jendela waktu yang dapat dipesan yang ditampilkan kepada pelanggan di etalase. Slot tidak boleh tumpang tindih kecuali diizinkan secara eksplisit.',
                             'edit' => 'Edit',
                             'many' => 'Banyak Booking dalam Satu Hari',
                             'one' => 'Satu Booking untuk Banyak Hari',
@@ -1208,7 +1244,7 @@ return [
 
                         'slots' => [
                             'add' => 'Tambah Slot',
-                            'description-info' => 'Durasi waktu akan dibuat dan ditampilkan berdasarkan slot. Setiap durasi waktu akan bersifat unik di semua slot dan akan terlihat di etalase.',
+                            'description-info' => 'Tentukan slot waktu yang tersedia untuk pemesanan ini. Jendela waktu yang dapat dipesan akan dibuat berdasarkan durasi slot dan waktu istirahat, dan ditampilkan kepada pelanggan di etalase.',
                             'save' => 'Simpan',
                             'title' => 'Durasi Waktu Slot',
                             'unavailable' => 'Tidak Tersedia',
@@ -1267,6 +1303,8 @@ return [
                             'type-mismatch' => 'Jenis pemesanan tidak dapat diubah.',
                             'time-validation' => 'Waktu mulai harus lebih kecil dari waktu selesai.',
                             'overlap-validation' => 'Slot waktu bertabrakan dengan slot yang sudah ada.',
+                            'slot-window-too-short' => 'Satu atau lebih jendela slot lebih pendek dari durasi :duration menit yang diperlukan. Setiap jendela harus setidaknya :duration menit.',
+                            'slot-window-too-short-field' => 'Jendela ini harus setidaknya :duration menit.',
                         ],
                     ],
 
@@ -1420,6 +1458,15 @@ return [
                 'value-per-locale' => 'Nilai Per Lokal',
                 'yes' => 'Ya',
 
+                'info' => [
+                    'is-filterable' => 'Menambahkan atribut ini ke filter bilah samping kategori. Tipe berbasis opsi dirender sebagai kotak centang; harga dirender sebagai slider rentang.',
+                    'is-configurable' => 'Menandai atribut ini sebagai poros varian (mis. Warna, Ukuran). Hanya tersedia untuk Select. Mengaktifkannya mengunci Value Per Channel dan Value Per Locale — varian diselesaikan secara global berdasarkan id opsi.',
+                    'value-per-locale' => 'Simpan nilai berbeda per locale. Tidak berlaku untuk tipe berbasis opsi atau boolean — labelnya sudah diterjemahkan melalui tabel opsi.',
+                    'value-per-channel' => 'Simpan nilai berbeda per kanal. Dinonaktifkan saat "Use to Create Configurable Product" aktif.',
+                    'is-visible-on-front' => 'Tampilkan atribut ini pada halaman produk di storefront.',
+                    'is-comparable' => 'Sertakan atribut ini saat membandingkan produk berdampingan.',
+                ],
+
                 'option' => [
                     'color' => 'Swatch Warna',
                     'dropdown' => 'Dropdown',
@@ -1484,6 +1531,15 @@ return [
                 'value-per-channel' => 'Nilai Per Saluran',
                 'value-per-locale' => 'Nilai Per Lokal',
                 'yes' => 'Ya',
+
+                'info' => [
+                    'is-filterable' => 'Menambahkan atribut ini ke filter bilah samping kategori. Tipe berbasis opsi dirender sebagai kotak centang; harga dirender sebagai slider rentang.',
+                    'is-configurable' => 'Menandai atribut ini sebagai poros varian (mis. Warna, Ukuran). Hanya tersedia untuk Select. Mengaktifkannya mengunci Value Per Channel dan Value Per Locale — varian diselesaikan secara global berdasarkan id opsi.',
+                    'value-per-locale' => 'Simpan nilai berbeda per locale. Tidak berlaku untuk tipe berbasis opsi atau boolean — labelnya sudah diterjemahkan melalui tabel opsi.',
+                    'value-per-channel' => 'Simpan nilai berbeda per kanal. Dinonaktifkan saat "Use to Create Configurable Product" aktif.',
+                    'is-visible-on-front' => 'Tampilkan atribut ini pada halaman produk di storefront.',
+                    'is-comparable' => 'Sertakan atribut ini saat membandingkan produk berdampingan.',
+                ],
 
                 'option' => [
                     'color' => 'Swatch Warna',
@@ -4802,6 +4858,7 @@ return [
             'table' => [
                 'actions' => 'Tindakan',
                 'no-records-available' => 'Tidak Ada Data Tersedia.',
+                'no-records-hint' => 'Coba sesuaikan filter Anda, atau periksa kembali nanti setelah data ditambahkan.',
             ],
         ],
 

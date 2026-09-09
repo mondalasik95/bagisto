@@ -41,6 +41,7 @@ return [
             'not-activated' => "Votre activation nécessite l'approbation de l'administrateur",
             'page-title' => 'Connexion client',
             'password' => 'Mot de passe',
+            'resend-verification' => 'Renvoyer l\'e-mail de vérification',
             'show-password' => 'Afficher le mot de passe',
             'title' => 'Se connecter',
             'verify-first' => 'Vérifiez d\'abord votre compte e-mail.',
@@ -195,6 +196,12 @@ return [
 
                 'view' => [
                     'billing-address' => 'Adresse de facturation',
+
+                    'booking-cancellation-not-allowed' => [
+                        'title' => 'Les articles de réservation ne seront pas annulés',
+                        'description' => 'Cette commande contient des produits de réservation marqués comme non annulables. L\'annulation de la commande n\'annulera que les articles restants ; les articles de réservation resteront actifs. Veuillez contacter le support si vous avez besoin d\'aide avec les articles de réservation.',
+                    ],
+
                     'cancel-btn-title' => 'Annuler',
                     'cancel-confirm-msg' => 'Êtes-vous sûr de vouloir annuler cette commande ?',
                     'cancel-error' => 'Votre commande ne peut pas être annulée.',
@@ -207,6 +214,7 @@ return [
                     'order-id' => 'ID de commande',
                     'page-title' => 'Commande #:order_id',
                     'payment-method' => 'Moyen de paiement',
+                    'reorder-booking-skipped' => 'Les produits de réservation ont été ignorés lors de la nouvelle commande. Veuillez les réserver à nouveau avec de nouvelles dates et plages horaires.',
                     'reorder-btn-title' => 'Recommander',
                     'shipping-address' => 'Adresse de livraison',
                     'shipping-method' => 'Méthode de livraison',
@@ -720,6 +728,11 @@ return [
                     'location' => 'Emplacement',
                     'view-on-map' => 'Voir sur la carte',
 
+                    'cancellation-not-allowed' => [
+                        'title' => 'Annulation non autorisée',
+                        'description' => 'Une fois cette réservation passée, elle ne peut être annulée. Veuillez vérifier attentivement les détails avant de passer à la caisse.',
+                    ],
+
                     'default' => [
                         'slot-duration-in-minutes' => ':minutes Minutes',
                         'slot-duration' => 'Durée du créneau',
@@ -736,6 +749,16 @@ return [
                     'event' => [
                         'book-your-ticket' => 'Réservez votre billet',
                         'title' => 'Événement le :',
+                        'total-price' => 'Prix total',
+                        'summary-title' => 'Votre réservation',
+                        'ticket-line' => ':name (:count × :price)',
+                        'base-fee-line' => 'Frais de base (:count × :price)',
+                        'ticket' => 'billet',
+                        'tickets' => 'billets',
+                        'total' => 'Total',
+                        'select-tickets-hint' => 'Sélectionnez les quantités de billets pour voir le total.',
+                        'starting-from' => 'À partir de',
+                        'base-fee-note' => 'Inclut les frais de base + le billet le moins cher. Le total se met à jour selon la sélection des billets.',
                     ],
 
                     'rental' => [
@@ -751,6 +774,18 @@ return [
                         'slot' => 'Créneau',
                         'no-slots-available' => 'Aucun créneau disponible',
                         'to' => 'À',
+                        'summary-title' => 'Votre location',
+                        'base-rental-fee' => 'Frais de location de base',
+                        'daily-rate-line' => 'Tarif journalier (:count × :rate)',
+                        'hourly-rate-line' => 'Tarif horaire (:count × :rate)',
+                        'day' => 'jour',
+                        'days' => 'jours',
+                        'hour' => 'heure',
+                        'hours' => 'heures',
+                        'total' => 'Total',
+                        'select-dates-hint' => 'Sélectionnez vos dates de location pour voir le total.',
+                        'starting-from' => 'À partir de',
+                        'rental-fee-note' => 'Inclut les frais de base + le tarif de location minimum. Le total se met à jour selon la durée choisie.',
                     ],
 
                     'table' => [
@@ -822,23 +857,34 @@ return [
 
             'cart' => [
                 'booking-from' => 'Réservation de',
+                'booking-location' => 'Lieu',
                 'booking-till' => 'Réservation jusqu\'à',
+                'charged-per' => 'Facturé par',
                 'daily' => 'Base quotidienne',
                 'event-from' => 'Événement de',
+                'event-location' => 'Lieu de l\'événement',
                 'event-ticket' => 'Billet d\'événement',
                 'event-till' => 'Événement jusqu\'à',
+                'guest-limit' => 'Limite d\'invités par table',
                 'hourly' => 'Base horaire',
 
                 'integrity' => [
                     'event' => [
                         'expired' => 'Cet événement a expiré.',
+                        'exceeds_available' => 'Seulement :qty billets sont disponibles pour cet événement.',
+                        'sold_out' => 'Les billets pour cet événement sont épuisés.',
+                        'ticket_exceeds_available' => 'Seulement :qty billets ":ticket" sont disponibles.',
+                        'ticket_sold_out' => 'Les billets ":ticket" sont épuisés.',
                     ],
 
                     'missing_options' => 'Les options sont manquantes pour ce produit.',
                     'inventory_warning' => 'La quantité demandée n\'est pas disponible, veuillez réessayer plus tard.',
+                    'rental_unavailable' => 'Ce produit de location n\'est pas disponible pour les dates sélectionnées.',
                     'select_hourly_duration' => 'Sélectionnez une durée de créneau d\'une heure.',
                 ],
 
+                'per-guest' => 'Par invité',
+                'per-table' => 'Par table',
                 'rent-from' => 'Louer de',
                 'rent-till' => 'Louer jusqu\'à',
                 'rent-type' => 'Type de location',

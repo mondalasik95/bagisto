@@ -41,6 +41,7 @@ return [
             'not-activated' => 'Your activation seeks admin approval',
             'page-title' => 'Customer Login',
             'password' => 'Password',
+            'resend-verification' => 'Resend Verification Email',
             'show-password' => 'Show Password',
             'title' => 'Sign In',
             'verify-first' => 'Verify your email account first.',
@@ -195,6 +196,12 @@ return [
 
                 'view' => [
                     'billing-address' => 'Billing Address',
+
+                    'booking-cancellation-not-allowed' => [
+                        'title' => 'Booking Items Will Not Be Canceled',
+                        'description' => 'This order contains booking products marked as non-cancellable. Cancelling the order will only cancel the remaining items; the booking items will remain active. Please contact support if you need assistance with the booking items.',
+                    ],
+
                     'cancel-btn-title' => 'Cancel',
                     'cancel-confirm-msg' => 'Are you sure you want to cancel this order ?',
                     'cancel-error' => 'Your order can not be canceled.',
@@ -207,6 +214,7 @@ return [
                     'order-id' => 'Order Id',
                     'page-title' => 'Order #:order_id',
                     'payment-method' => 'Payment Method',
+                    'reorder-booking-skipped' => 'Booking products were skipped during reorder. Please book them again with fresh date and time slots.',
                     'reorder-btn-title' => 'Reorder',
                     'shipping-address' => 'Shipping Address',
                     'shipping-method' => 'Shipping Method',
@@ -720,6 +728,11 @@ return [
                     'location' => 'Location',
                     'view-on-map' => 'View on Map',
 
+                    'cancellation-not-allowed' => [
+                        'title' => 'Cancellation Not Allowed',
+                        'description' => 'Once this booking is placed, it cannot be canceled. Please review the details carefully before checking out.',
+                    ],
+
                     'default' => [
                         'slot-duration-in-minutes' => ':minutes Minutes',
                         'slot-duration' => 'Slot Duration',
@@ -736,6 +749,16 @@ return [
                     'event' => [
                         'book-your-ticket' => 'Book Your Ticket',
                         'title' => 'Event on :',
+                        'total-price' => 'Total Price',
+                        'summary-title' => 'Your booking',
+                        'ticket-line' => ':name (:count × :price)',
+                        'base-fee-line' => 'Base fee (:count × :price)',
+                        'ticket' => 'ticket',
+                        'tickets' => 'tickets',
+                        'total' => 'Total',
+                        'select-tickets-hint' => 'Select your ticket quantities to see the total.',
+                        'starting-from' => 'Starting from',
+                        'base-fee-note' => 'Includes base fee + cheapest ticket price. Total updates with your ticket selection.',
                     ],
 
                     'rental' => [
@@ -751,6 +774,18 @@ return [
                         'slot' => 'Slot',
                         'no-slots-available' => 'No slots available',
                         'to' => 'To',
+                        'summary-title' => 'Your rental',
+                        'base-rental-fee' => 'Base rental fee',
+                        'daily-rate-line' => 'Daily rate (:count × :rate)',
+                        'hourly-rate-line' => 'Hourly rate (:count × :rate)',
+                        'day' => 'day',
+                        'days' => 'days',
+                        'hour' => 'hour',
+                        'hours' => 'hours',
+                        'total' => 'Total',
+                        'select-dates-hint' => 'Select your rental dates to see the total.',
+                        'starting-from' => 'Starting from',
+                        'rental-fee-note' => 'Includes base fee + minimum rental rate. Total updates with your selected duration.',
                     ],
 
                     'table' => [
@@ -822,23 +857,34 @@ return [
 
             'cart' => [
                 'booking-from' => 'Booking From',
+                'booking-location' => 'Location',
                 'booking-till' => 'Booking Till',
+                'charged-per' => 'Charged Per',
                 'daily' => 'Daily Basis',
                 'event-from' => 'Event From',
+                'event-location' => 'Event Location',
                 'event-ticket' => 'Event Ticket',
                 'event-till' => 'Event Till',
+                'guest-limit' => 'Guest Limit Per Table',
                 'hourly' => 'Hourly Basis',
 
                 'integrity' => [
                     'event' => [
                         'expired' => 'This event has been expired.',
+                        'exceeds_available' => 'Only :qty tickets are available for this event.',
+                        'sold_out' => 'Tickets for this event are sold out.',
+                        'ticket_exceeds_available' => 'Only :qty ":ticket" tickets are available.',
+                        'ticket_sold_out' => '":ticket" tickets are sold out.',
                     ],
 
                     'missing_options' => 'Options are missing for this product.',
                     'inventory_warning' => 'The requested quantity is not available, please try again later.',
-                    'select_hourly_duration' => 'Select a slot duration of one hour.',
+                    'rental_unavailable' => 'This rental product is not available for the selected dates.',
+                    'select_hourly_duration' => 'Select a slot duration of at least one hour.',
                 ],
 
+                'per-guest' => 'Per Guest',
+                'per-table' => 'Per Table',
                 'rent-from' => 'Rent From',
                 'rent-till' => 'Rent Till',
                 'rent-type' => 'Rent Type',
